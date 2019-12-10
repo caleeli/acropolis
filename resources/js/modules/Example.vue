@@ -27,7 +27,7 @@ export default {
           },
           {
               icon: "fas fa-address-book",
-              content: "<h5>Registrar aporte</h5><p>Registra tu aporte subiendo una imagen</p>",
+              content: "<h5>Registrar aporte mensual</h5><p>Registra tu aporte mensual subiendo la imagen de tu recibo/deposito</p>",
               link: "/aporte/registrar",
           },
           {
