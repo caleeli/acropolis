@@ -5,5 +5,5 @@ run(
     // Update front end
     onchange(['resources/js','resources/sass','resources/images'], 'npm run prod;') .
     // Rebuild database
-    onchange(['database/migrations'], 'composer dumpautoload;php artisan migrate;') .
+    onchange(['database/migrations'], 'composer dumpautoload;php artisan migrate;')
 );
