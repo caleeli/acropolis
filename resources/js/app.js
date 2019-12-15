@@ -49,6 +49,11 @@ const app = new Vue({
             user: window.userId ? this.$api.user.row(window.userId) : null,
         };
     },
+    methods: {
+        clickAvatar() {
+            this.$router.push({ path: '/user/avatar' });
+        },
+    },
     mounted() {
         if (window.userId) {
             window.axios.post(

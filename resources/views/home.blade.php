@@ -8,7 +8,7 @@
                     <a class="navbar-brand" href="/home">{{config('app.name')}}</a>
                 </template>
                 <template slot="right">
-                    <a href="javascript:void(0)"><avatar v-model="user" style="font-size: 2em"></avatar></a>
+                    <a href="javascript:void(0)" @click="clickAvatar"><avatar v-model="user" style="font-size: 2em"></avatar></a>
                 </template>
             </topbar>
         </template>

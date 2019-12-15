@@ -2,9 +2,11 @@
 
 namespace App;
 
+use App\Traits\HasBladeCompile;
 use App\Traits\HasMenus;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -12,14 +14,15 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasMenus;
     use Notifiable;
+    use HasBladeCompile;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password', 'avatar',
+    protected $guarded = [
+        'id',
     ];
 
     /**
@@ -40,4 +43,35 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'avatar' => 'array',
     ];
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function sendMessage($icon, $category_id, $title, $content, $link)
+    {
+        DB::beginTransaction();
+
+        $properties = compact('icon', 'category_id', 'title', 'content');
+        foreach (User::all() as $user) {
+            $message = $user->messages()->create($properties);
+            $message->content = $this->bladeMessage($content, $message);
+            $message->link = $this->bladeMessage($link, $message);
+            $message->save();
+        }
+        DB::commit();
+
+        return true;
+    }
+
+    private function bladeMessage($content, Message $message)
+    {
+        return $this->bladeCompile($content, [
+            'mensaje' => $message,
+            'nombre' => $message->user->name,
+            'mes' => __(date('F')),
+            'ultimo_aporte' => $message->user->ultimo_aporte,
+        ]);
+    }
 }

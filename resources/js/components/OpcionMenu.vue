@@ -1,9 +1,12 @@
 <template>
-  <router-link :to="value.link" v class="opcion-menu">
+  <router-link :to="value.attributes.link || ''" v class="opcion-menu">
     <span class="opcion-icon">
-      <i :class="value.icon"></i>
+      <i :class="value.attributes.icon"></i>
     </span>
-    <div class="opcion-text" v-html="value.content"></div>
+    <div class="opcion-text">
+      <b>{{ value.attributes.title }}</b>
+      <div v-html="value.attributes.content"></div>
+    </div>
   </router-link>
 </template>
 

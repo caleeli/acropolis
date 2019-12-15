@@ -1,13 +1,18 @@
 <template>
   <panel name="Cambia tu avatar" icon="fa fa-user" class="panel-success">
     <template slot="actions">
-        <router-link to="/" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-left"></i></router-link>
+      <router-link to="/" class="btn btn-sm btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i>
+      </router-link>
     </template>
     <div class="m-t">
+      <avatar v-model="user" style="font-size: 8em"></avatar>
       <div class="form-group">
-        <upload v-model="avatar" @change="updateAvatar">
-          <button type="button" class="btn btn-primary">Escoger imagen</button>
-        </upload>
+        <div class="d-inline-block">
+          <upload v-model="avatar" @change="updateAvatar">
+            <button type="button" class="btn btn-primary">Cambiar imagen</button>
+          </upload>
+        </div>
       </div>
     </div>
   </panel>
@@ -25,12 +30,12 @@ export default {
   },
   methods: {
     updateAvatar(avatar) {
-        this.user.attributes.avatar = avatar;
-        this.$root.$api.user.axios(null, {
-            url: '/api/data/user/' + this.user.id,
-            method: "put",
-            data: {data: this.user},
-        });
+      this.user.attributes.avatar = avatar;
+      this.$root.$api.user.axios(null, {
+        url: "/api/data/user/" + this.user.id,
+        method: "put",
+        data: { data: this.user }
+      });
     }
   }
 };
