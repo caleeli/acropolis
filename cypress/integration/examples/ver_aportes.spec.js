@@ -18,5 +18,9 @@ context('Actions', () => {
         cy.wait('@loadMessage');
         cy.get('a:contains("Ver mis aportes")').click();
         cy.get('a:contains("Ver detalles")').click();
+        cy.get('a.view-image:first').click();
+        cy.get('img.recibo:visible');
+        cy.get('a.view-image:first').click();
+        cy.get('img.recibo:visible').should('not.exist');
     })
 })
