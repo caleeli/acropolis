@@ -9,6 +9,13 @@
       <div v-for="row in aportes" class="row border-bottom mb-3 pb-3" :key="row.id">
         <div class="col-4 col-md-2">
           <b>{{mes(row.attributes.mes)}}/{{row.attributes.gestion}}</b>
+          <div>
+            <a href="javascript:void(0)" @click="verImagen(row)">
+              <i v-if="row.id === showImage" class="far fa-image"></i>
+              <i v-else class="fas fa-eye"></i>
+              <small>imagen</small>
+            </a>
+          </div>
         </div>
         <div class="col-4 col-md-2">
           {{fecha(row.attributes.fecha_pago)}}
@@ -30,6 +37,9 @@
           {{row.attributes.verificado_por}}
           <small class="d-block">verificado por</small>
         </div>
+        <div class="col-12" v-if="row.id === showImage">
+          <img :src="row.attributes.imagen.url" class="w-100" />
+        </div>
       </div>
     </div>
   </panel>
@@ -43,10 +53,18 @@ export default {
   mixins: [window.ResourceMixin],
   data() {
     return {
+      showImage: null,
       aportes: this.$api[`/user/1/aportes?sort=-gestion,-mes`].array()
     };
   },
   methods: {
+    verImagen(row) {
+      if (this.showImage === row.id) {
+        this.showImage = null;
+      } else {
+        this.showImage = row.id;
+      }
+    },
     fecha(date) {
       return moment(date).format("DD/MM/YYYY");
     },

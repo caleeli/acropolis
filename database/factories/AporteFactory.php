@@ -22,12 +22,13 @@ $factory->define(Aporte::class, function (Faker $faker) {
             $ext = count($ext = explode('.', $name)) > 1 ? $ext[count($ext) - 1] : '';
             $path = uniqid('', true) . '.' . $ext;
             $url = url('/storage/' . $path);
-            return json_encode([
+            copy($filepath, public_path('storage/' . $path));
+            return [
                 'name' => $name,
                 'mime' => $mime,
                 'path' => $path,
                 'url' => $url,
-            ]);
+            ];
         },
         'recibo' => $faker->numberBetween(12345, 23456),
         'verificado_por' => $faker->randomElement(['AM', 'DC', 'VC']),

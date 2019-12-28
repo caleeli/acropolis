@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class Aporte extends Model
 {
+    protected $casts = [
+        'imagen' => 'array',
+    ];
+
     public function scopeConsolidado($query)
     {
         return $query->select([
