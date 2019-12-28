@@ -6,7 +6,9 @@
       </a>
     </template>
     <div class="m-t">
-      <router-link to="/aportes/ver_detalle"><i class="fas fa-th-list"></i> Ver detalles</router-link>
+      <router-link to="/aportes/ver_detalle">
+        <i class="fas fa-th-list"></i> Ver detalles
+      </router-link>
       <table class="table">
         <thead>
           <tr>
@@ -58,9 +60,6 @@ export default {
         "Nov",
         "Dic"
       ][mes - 1];
-    },
-    uploadImage(imagen) {
-      this.imagen = imagen;
     }
   }
 };

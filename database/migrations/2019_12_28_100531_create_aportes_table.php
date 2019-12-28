@@ -21,6 +21,7 @@ class CreateAportesTable extends Migration
             $table->smallInteger('gestion');
             $table->timestamp('fecha_pago');
             $table->double('monto');
+            $table->string('medio');
             $table->string('recibo');
             $table->string('imagen');
             $table->string('verificado_por');

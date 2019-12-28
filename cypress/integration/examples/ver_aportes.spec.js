@@ -17,5 +17,6 @@ context('Actions', () => {
         cy.get('.mensaje:first-child').click();
         cy.wait('@loadMessage');
         cy.get('a:contains("Ver mis aportes")').click();
+        cy.get('a:contains("Ver detalles")').click();
     })
 })

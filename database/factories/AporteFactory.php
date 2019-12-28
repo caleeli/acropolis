@@ -13,6 +13,7 @@ $factory->define(Aporte::class, function (Faker $faker) {
         'gestion' => $faker->numberBetween(2017, 2019),
         'fecha_pago' => $faker->dateTime(),
         'monto' => $faker->numberBetween(1, 3) * 50,
+        'medio' => $faker->randomElement(['Caja', 'Banco']),
         'recibo' => $faker->numberBetween(12345, 23456),
         'imagen' => function () use ($faker) {
             $filepath = $faker->randomElement(glob(resource_path('images/specs/*.*')));
