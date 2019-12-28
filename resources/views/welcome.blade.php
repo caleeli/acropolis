@@ -101,12 +101,12 @@
                         <a href="{{ url('/home') }}">Home</a>
                     @else
                         <span class="circle-container">
-                            <a href="{{ route('login') }}" class="circle login"><i class="far fa-user"></i></a><br>
+                            <a id="login" href="{{ route('login') }}" class="circle login"><i class="far fa-user"></i></a><br>
                             Ingresar
                         </span>
                         @if (Route::has('register'))
                         <span class="circle-container">
-                            <a href="{{ route('register') }}" class="circle register"><i class="far fa-registered"></i></a><br>
+                            <a id="register" href="{{ route('register') }}" class="circle register"><i class="far fa-registered"></i></a><br>
                             Registrarse
                         </span>
                         @endif

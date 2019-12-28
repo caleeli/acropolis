@@ -10,7 +10,6 @@
         <div>Escoge el tipo de mensaje</div>
         <button
           v-for="template in templates"
-          :id="'msg-' + template.id"
           :key="template.id"
           type="button"
           class="btn btn-light"

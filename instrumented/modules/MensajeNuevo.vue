@@ -10,8 +10,7 @@
       <div class="btn-group" role="group">
         <button
           v-for="categoria in categorias"
-          :key="'cat-'+categoria.id"
-          :id="'cat-'+categoria.id"
+          :key="categoria.id"
           type="button"
           class="btn"
           :class="{'btn-secondary':categoria.id==categoria_id,'btn-light':categoria.id!=categoria_id}"
@@ -25,8 +24,7 @@
       <div class="btn-group" role="group">
         <button
           v-for="icon in icons"
-          :key="'icon-'+icon.replace(/\s+/, '-')"
-          :id="'icon-'+icon.replace(/\s+/, '-')"
+          :key="icon"
           type="button"
           class="btn"
           :class="{'btn-secondary':icono==icon,'btn-light':icono!=icon}"
@@ -36,10 +34,10 @@
         </button>
       </div>
       <div>Título</div>
-      <input id="titulo" class="form-control" v-model="titulo" />
+      <input class="form-control" v-model="titulo" />
       <div>Texto</div>
       <tinymce v-model="contenido"></tinymce>
-      <button id="enviar" type="button" class="btn btn-success" @click="enviar">Enviar</button>
+      <button type="button" class="btn btn-success" @click="enviar">Enviar</button>
     </div>
   </panel>
 </template>

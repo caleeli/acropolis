@@ -1,9 +1,9 @@
 <template>
     <div class="principal position-relative">
-        <router-link to="/mensaje/tipo" class="btn-plus" id="new-message"><i class="fas fa-pen"></i></router-link>
+        <router-link to="/mensaje/tipo" class="btn-plus"><i class="fas fa-pen"></i></router-link>
         <img src="http://www.acropolis.org.bo/wp-content/uploads/2016/08/portada0.jpg" class="portada">
         <div  style="padding:1em">
-            <mensaje v-for="(opcion,index) in mensajes" :key="index" :value="opcion"></mensaje>
+            <opcion-menu v-for="(opcion,index) in mensajes" :key="index" :value="opcion"></opcion-menu>
         </div>
     </div>
 </template>

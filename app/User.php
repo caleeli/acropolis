@@ -49,6 +49,11 @@ class User extends Authenticatable
         return $this->hasMany(Message::class);
     }
 
+    public function aportes()
+    {
+        return $this->hasMany(Aporte::class, 'miembro_id');
+    }
+
     public function sendMessage($icon, $category_id, $title, $content, $link)
     {
         DB::beginTransaction();
@@ -56,6 +61,7 @@ class User extends Authenticatable
         $properties = compact('icon', 'category_id', 'title', 'content');
         foreach (User::all() as $user) {
             $message = $user->messages()->create($properties);
+            $message->title = $this->bladeMessage($title, $message);
             $message->content = $this->bladeMessage($content, $message);
             $message->link = $this->bladeMessage($link, $message);
             $message->save();

@@ -1,7 +1,7 @@
 <template>
   <panel :name="title" :icon="icon" class="panel-success">
     <template slot="actions">
-      <a id="back" href="javascript:history.go(-1)" class="btn btn-sm btn-outline-secondary">
+      <a href="javascript:history.go(-1)" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-arrow-left"></i>
       </a>
     </template>

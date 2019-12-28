@@ -8,20 +8,9 @@
                     <a class="navbar-brand" href="/home">{{config('app.name')}}</a>
                 </template>
                 <template slot="right">
-                    <a href="javascript:void(0)" @click="clickAvatar"><avatar v-model="user" style="font-size: 2em"></avatar></a>
+                    <a id="user-avatar" href="javascript:void(0)" @click="clickAvatar"><avatar v-model="user" style="font-size: 2em"></avatar></a>
                 </template>
             </topbar>
-        </template>
-        <template slot="west">
-                <list v-slot="{item, control, level}" style="width:320px"
-                    :value="menus">
-                    <a href="javascript:void(0)" :class="level"
-                        class="list-group-item list-group-item-action"
-                        @click="control.toggle(me).hasAction ? westOpen=false : null">
-                        <i v-if="item.icon" :class="item.icon"></i>
-                        @{{item.name}}
-                    </a>
-                </list>
         </template>
         <router-view></router-view>
     </layout>
