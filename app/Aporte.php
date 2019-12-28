@@ -13,7 +13,8 @@ class Aporte extends Model
             DB::raw('max(id) as id'),
             'mes',
             'gestion',
-            DB::raw('sum(monto) as monto')
+            DB::raw('sum(monto) as monto'),
+            DB::raw('min(verificado_por) as verificado'),
         ])->groupBy('gestion', 'mes');
     }
 }

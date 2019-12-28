@@ -34,6 +34,8 @@ context('Actions', () => {
     })
 
     it('Ver mensaje', () => {
+        cy.dbSeed('SpecAportesSeeder');
+        cy.reload();
         cy.get('.mensaje:first-child').click();
         cy.wait(1000);
         cy.get('#back').click();
