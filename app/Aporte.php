@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class Aporte extends Model
 {
+    protected $guarded = [];
+
     protected $casts = [
         'imagen' => 'array',
+        'fecha_pago' => 'date',
     ];
 
     public function scopeConsolidado($query)

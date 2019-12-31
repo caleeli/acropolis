@@ -19,10 +19,18 @@ context('Actions', () => {
         cy.get('.mensaje:first-child').click();
         cy.wait('@loadMessage');
         cy.get('a:contains("Registrar aporte")').click();
+        cy.get('#mes').select('10');
+        cy.get('#gestion').clear().type('2019');
+        cy.get('#fecha_pago').click();
+        cy.get('.day:contains("17")').click();
+        cy.get('#monto').clear().type('150');
+        cy.get('#medio').select('Caja');
+        cy.get('#recibo').clear().type('123');
         cy.get('input[type=file]').then(function (el) {
-            cy.uploadFile('input[type=file]', 'avatar.jpeg', 'image/jpeg').then(() => {
+            cy.uploadFile('input[type=file]', 'recibo.png', 'image/png').then(() => {
                 el[0].dispatchEvent(new Event('change', { bubbles: true }));
             });
-        })
+        });
+        cy.get('#registrar').click();
     })
 })

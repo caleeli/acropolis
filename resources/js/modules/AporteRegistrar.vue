@@ -8,7 +8,7 @@
     <div class="m-t">
       <div class="form-group">
         <label>Mes</label>
-        <select class="form-control" v-model="mes">
+        <select id="mes" class="form-control" v-model="mes">
           <option value="1">enero</option>
           <option value="2">febrero</option>
           <option value="3">marzo</option>
@@ -25,7 +25,26 @@
       </div>
       <div class="form-group">
         <label>Gestion</label>
-        <input class="form-control" v-model="gestion" />
+        <input id="gestion" class="form-control" v-model="gestion" />
+      </div>
+      <div class="form-group">
+        <label>Fecha de pago</label>
+        <datetime id="fecha_pago" type="date" v-model="fecha_pago" />
+      </div>
+      <div class="form-group">
+        <label>Monto</label>
+        <input id="monto" class="form-control" v-model="monto" />
+      </div>
+      <div class="form-group">
+        <label>Medio</label>
+        <select id="medio" class="form-control" v-model="medio">
+          <option value="Caja">Caja</option>
+          <option value="Banco">Banco</option>
+        </select>
+      </div>
+      <div class="form-group" v-if="medio==='Caja'">
+        <label>Recibo</label>
+        <input id="recibo" class="form-control" v-model="recibo" />
       </div>
       <div class="form-group">
         <upload v-model="imagen" @change="uploadImage">
@@ -34,7 +53,9 @@
         </upload>
       </div>
       <div class="form-group">
-        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i> Guardar registro</button>
+        <button id="registrar" type="button" class="btn btn-primary" @click="guardarRegistro">
+          <i class="fas fa-save"></i> Guardar registro
+        </button>
       </div>
     </div>
   </panel>
@@ -43,15 +64,38 @@
 <script>
 export default {
   path: "/aporte/registrar",
-  mixins: [window.workflowMixin],
+  mixins: [window.ResourceMixin],
   data() {
     return {
+      aportes: this.$api[`user/${this.$root.user.id}/aportes`],
       imagen: null,
       mes: String(new Date().getMonth() + 1),
-      gestion: String(new Date().getFullYear() + 1)
+      gestion: String(new Date().getFullYear() + 1),
+      fecha_pago: moment().format("YYYY-MM-DD"),
+      monto: "",
+      medio: "Banco",
+      recibo: ""
     };
   },
   methods: {
+    guardarRegistro() {
+      this.aportes.post({
+        data: {
+          attributes: {
+            miembro_id: this.$root.user.id,
+            mes: this.mes,
+            gestion: this.gestion,
+            fecha_pago: this.fecha_pago,
+            monto: this.monto,
+            medio: this.medio,
+            recibo: this.recibo,
+            imagen: this.imagen
+          }
+        }
+      }).then(() => {
+          this.$router.push({ path: '/aportes/ver' });
+      });
+    },
     uploadImage(imagen) {
       this.imagen = imagen;
     }

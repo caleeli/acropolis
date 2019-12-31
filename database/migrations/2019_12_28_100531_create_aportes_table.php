@@ -19,12 +19,12 @@ class CreateAportesTable extends Migration
             $table->unsignedBigInteger('miembro_id');
             $table->smallInteger('mes');
             $table->smallInteger('gestion');
-            $table->timestamp('fecha_pago');
+            $table->date('fecha_pago');
             $table->double('monto');
             $table->string('medio');
             $table->string('recibo');
             $table->string('imagen');
-            $table->string('verificado_por');
+            $table->string('verificado_por')->nullable();
 
             $table->foreign('miembro_id')->references('id')->on('users');
         });
