@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('Aliasing', () => {
+context('Usuario Miembro', () => {
     beforeEach(() => {
         cy.viewport(375, 667);
         cy.visit('http://localhost:9097');

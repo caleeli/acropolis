@@ -16,6 +16,7 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 import '@cypress/code-coverage/support'
+import '@foreachbe/cypress-tinymce'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
@@ -28,4 +29,8 @@ beforeEach(() => {
     cy.server();
     cy.route('/api/data/user/1/messages*').as('getMessages');
     cy.route('/api/data/messages/*').as('loadMessage');
+    cy.route('/api/data/user/0/aportes*').as('getAportesInicial');
+    cy.route('/api/data/user/1/aportes*').as('getAportes/1');
+    cy.route('put', '/api/data/aportes/*').as('updateAporte');
+    cy.route('post', '/api/data/user/1/aportes').as('postAporte');
 });

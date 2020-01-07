@@ -1,5 +1,5 @@
 
-context('Usuario Miembro', () => {
+context('Usuario Economía', () => {
     beforeEach(() => {
         cy.visit('http://localhost:9097');
         cy.viewport(375, 667);
@@ -14,13 +14,17 @@ context('Usuario Miembro', () => {
     it('Ver aportes mensuales', () => {
         cy.dbSeed('SpecAportesSeeder');
         cy.reload();
-        cy.get('.mensaje:first-child').click();
-        cy.wait('@loadMessage');
-        cy.get('a:contains("Ver mis aportes")').click();
-        cy.get('a:contains("Ver detalles")').click();
+        cy.get('#ver-aportes-todos').click();
+        cy.get('#miembro input').focus().type('econo');
+        cy.get('span:contains("economia")').click();
+        cy.wait('@getAportes/1');
         cy.get('a.view-image:first').click();
-        cy.get('img.recibo:visible');
+        cy.get('button.verificar:first').click();
+        cy.wait('@updateAporte');
         cy.get('a.view-image:first').click();
-        cy.get('img.recibo:visible').should('not.exist');
+        cy.get('button:contains("Ver más")').click();
+        cy.wait('@getAportes/1');
+        cy.get('#miembro .fa-times').click();
+        cy.wait('@getAportesInicial');
     })
 })

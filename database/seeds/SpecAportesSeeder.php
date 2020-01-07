@@ -23,8 +23,14 @@ class SpecAportesSeeder extends Seeder
             $template->content,
             $template->link
         );
-        factory(Aporte::class, 10)->create([
+        factory(Aporte::class, 20)->create([
             'miembro_id' => 1,
+        ]);
+        factory(Aporte::class)->create([
+            'miembro_id' => 1,
+            'mes' => intval(date('m')),
+            'gestion' => date('Y'),
+            'verificado_por' => null,
         ]);
     }
 }

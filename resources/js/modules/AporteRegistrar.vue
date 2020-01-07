@@ -79,8 +79,8 @@ export default {
   },
   methods: {
     guardarRegistro() {
-      this.aportes.post({
-        data: {
+      this.aportes
+        .post({
           attributes: {
             miembro_id: this.$root.user.id,
             mes: this.mes,
@@ -91,10 +91,10 @@ export default {
             recibo: this.recibo,
             imagen: this.imagen
           }
-        }
-      }).then(() => {
-          this.$router.push({ path: '/aportes/ver' });
-      });
+        })
+        .then(() => {
+          this.$router.push({ path: "/aportes/ver" });
+        });
     },
     uploadImage(imagen) {
       this.imagen = imagen;

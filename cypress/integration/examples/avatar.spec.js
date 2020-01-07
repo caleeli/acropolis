@@ -1,5 +1,5 @@
 
-context('Actions', () => {
+context('Usuario Miembro', () => {
     beforeEach(() => {
         cy.visit('http://localhost:9097');
         cy.viewport(375, 667);

@@ -24,4 +24,9 @@ class Aporte extends Model
             DB::raw('min(verificado_por) as verificado'),
         ])->groupBy('gestion', 'mes');
     }
+
+    public function miembro()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

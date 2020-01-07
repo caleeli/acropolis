@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => ['url' => 'https://www.meteorologiaenred.com/wp-content/uploads/2019/04/Pit%C3%A1goras.jpg'],
             'password' => Hash::make('12345678'),
             'ultimo_aporte' => 'Enero/2019',
+            'iniciales' => 'EC',
         ]);
     }
 }

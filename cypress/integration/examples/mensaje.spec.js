@@ -1,5 +1,5 @@
 
-context('Actions', () => {
+context('Usuario Economía', () => {
     beforeEach(() => {
         cy.visit('http://localhost:9097');
         cy.viewport(375, 667);
@@ -18,6 +18,7 @@ context('Actions', () => {
         cy.get('#icon-fas-fa-book-reader').click();
         cy.get('#titulo').clear();
         cy.get('#titulo').type('Mensaje sobre escolástica', {parseSpecialCharSequences: false});
+        cy.setTinyMceContent('mceu_12', 'Hola mundo');
         cy.get('#enviar').click();
         cy.wait(1000);
     })
