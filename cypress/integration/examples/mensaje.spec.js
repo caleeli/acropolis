@@ -17,8 +17,7 @@ context('Usuario Economía', () => {
         cy.get('#cat-2').click();
         cy.get('#icon-fas-fa-book-reader').click();
         cy.get('#titulo').clear();
-        cy.get('#titulo').type('Mensaje sobre escolástica', {parseSpecialCharSequences: false});
-        cy.setTinyMceContent('mceu_12', 'Hola mundo');
+        cy.get('#titulo').type('Mensaje sobre escolástica', { parseSpecialCharSequences: false });
         cy.get('#enviar').click();
         cy.wait(1000);
     })
@@ -29,7 +28,7 @@ context('Usuario Economía', () => {
         cy.get('#cat-2').click();
         cy.get('#icon-fas-fa-book-reader').click();
         cy.get('#titulo').clear();
-        cy.get('#titulo').type('Mensaje para {{nombre}}', {parseSpecialCharSequences: false});
+        cy.get('#titulo').type('Mensaje para {{nombre}}', { parseSpecialCharSequences: false });
         cy.get('#enviar').click();
         cy.wait(1000);
     })

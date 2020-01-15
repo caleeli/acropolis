@@ -111,9 +111,9 @@ export default {
     loadRegistro(id) {
       this.aporte_id = this.$route.params.id;
       if (!id) return;
-      this.$api.aporte.get(id).then(aporte => {
+      this.$api.aporte.load(id).then(aporte => {
         this.miembro = aporte.attributes.miembro_id;
-        this.mes = aporte.aporte.attributes.mes;
+        this.mes = aporte.attributes.mes;
         this.gestion = aporte.attributes.gestion;
         this.fecha_pago = aporte.attributes.fecha_pago;
         this.monto = aporte.attributes.monto;
@@ -127,8 +127,8 @@ export default {
       this.uploadErrorMessage = response.responseJSON.message || message;
     },
     guardarRegistro() {
-      this.aportes[this.aporte_id ? "put" : "post"]({
-        id: this.aporte_id ? this.aporte_id : undefined,
+      this.aportes[parseInt(this.aporte_id) ? "put" : "post"]({
+        id: parseInt(this.aporte_id) ? this.aporte_id : undefined,
         attributes: {
           miembro_id: this.miembro,
           mes: this.mes,
@@ -150,6 +150,9 @@ export default {
       this.showUploadError = false;
       this.imagen = imagen;
     }
+  },
+  mounted() {
+    this.loadRegistro(this.$route.params.id);
   },
   watch: {
     $route: {

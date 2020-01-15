@@ -1,7 +1,10 @@
 <template>
   <panel name="Ver todos los aportes" icon="fa fa-user" class="panel-success">
     <template slot="actions">
-      <router-link :to="{path:'/aporte/admin/registrar'}" class="btn btn-sm btn-outline-secondary">
+      <router-link
+        :to="{path:'/aporte/admin/registrar/0'}"
+        class="btn btn-sm btn-outline-secondary"
+      >
         <i class="fas fa-plus"></i>
       </router-link>
       <a href="javascript:history.go(-1)" class="btn btn-sm btn-outline-secondary">
@@ -59,17 +62,20 @@
             v-if="row.attributes.verificado_por"
             class="d-block"
           >verificado por</small>
-          <template v-else>
-            <button
-              type="button"
-              class="btn btn-sm btn-success verificar"
-              @click="verificarAporte(row)"
-            ><i class="fas fa-check"></i></button>
-            <router-link
-              class="btn btn-sm btn-primary editar"
-              :to="{path: `/aporte/admin/registrar/${row.id}`}"
-            ><i class="fas fa-pen-fancy"></i></router-link>
-          </template>
+          <button
+            v-if="!row.attributes.verificado_por"
+            type="button"
+            class="btn btn-sm btn-success verificar"
+            @click="verificarAporte(row)"
+          >
+            <i class="fas fa-check"></i>
+          </button>
+          <router-link
+            class="btn btn-sm btn-primary editar"
+            :to="{path: `/aporte/admin/registrar/${row.id}`}"
+          >
+            <i class="fas fa-pen-fancy"></i>
+          </router-link>
         </div>
         <div class="col-12" v-if="row.id === showImage">
           <img :src="row.attributes.imagen.url" class="recibo w-100" />
