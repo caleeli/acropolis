@@ -1,6 +1,12 @@
 <template>
-  <panel name="Ver todos los aportes" icon="fa fa-user" class="panel-success">
+  <panel name="Administración" icon="fa fa-user" class="panel-success">
     <template slot="actions">
+      <router-link
+        :to="{path:'/admin/import'}"
+        class="btn btn-sm btn-outline-secondary"
+      >
+        <i class="fas fa-file-import"></i>
+      </router-link>
       <router-link
         :to="{path:'/aporte/admin/registrar/0'}"
         class="btn btn-sm btn-outline-secondary"

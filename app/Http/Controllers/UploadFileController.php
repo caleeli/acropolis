@@ -28,11 +28,13 @@ class UploadFileController extends Controller
         $json = new StdClass();
         $json->name = $file->getClientOriginalName();
         $json->mime = $file->getClientMimeType();
-        $regexp = str_replace('\*', '.+', preg_quote($accept, '/'));
-        if (!$accept || preg_match("/$regexp/", $json->mime)) {
-            $json->path = $file->storePubliclyAs('', $this->getPublicName($file), 'public');
-            $json->url = asset('storage/' . $json->path);
-            return $json;
+        foreach(preg_split('/\s*,\s*/', $accept) as $mime) {
+            $regexp = str_replace('\*', '.+', preg_quote($mime, '/'));
+            if (!$accept || preg_match("/$regexp/", $json->mime)) {
+                $json->path = $file->storePubliclyAs('', $this->getPublicName($file), 'public');
+                $json->url = asset('storage/' . $json->path);
+                return $json;
+            }
         }
         return null;
     }

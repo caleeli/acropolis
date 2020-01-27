@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
 
 class Aporte extends Model
 {
@@ -28,5 +29,24 @@ class Aporte extends Model
     public function miembro()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Importar datos a la tabla de aportes
+     *
+     * @return void
+     */
+    public static function importar($excel)
+    {
+        $reader = new Xls();
+        $spreadsheet = $reader->load(public_path('/storage/' . $excel['path']));
+        foreach($spreadsheet->getAllSheets() as $sheet) {
+            $ene = $sheet->getCell('G2')->getValue();
+            if ($ene === 'ENE') {
+                $gestion = $sheet->getTitle();
+            }
+        }
+        $sheet = $spreadsheet->getSheet(1);
+        return $sheet->getCell('D2')->getValue();
     }
 }

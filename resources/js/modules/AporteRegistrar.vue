@@ -83,6 +83,7 @@ export default {
         .post({
           attributes: {
             miembro_id: this.$root.user.id,
+            a_pagar: this.$root.user.attributes.aporte_mensual,
             mes: this.mes,
             gestion: this.gestion,
             fecha_pago: this.fecha_pago,

@@ -12,6 +12,7 @@ $factory->define(Aporte::class, function (Faker $faker) {
         'mes' => $faker->numberBetween(1, 12),
         'gestion' => $faker->numberBetween(2017, 2019),
         'fecha_pago' => $faker->dateTime(),
+        'a_pagar' => 150,
         'monto' => $faker->numberBetween(1, 3) * 50,
         'medio' => $faker->randomElement(['Caja', 'Banco']),
         'recibo' => $faker->numberBetween(12345, 23456),

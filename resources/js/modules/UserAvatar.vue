@@ -1,9 +1,9 @@
 <template>
-  <panel name="Cambia tu avatar" icon="fa fa-user" class="panel-success">
+  <panel :name="user.attributes.name" icon="fa fa-user" class="panel-success">
     <template slot="actions">
-      <router-link to="/" class="btn btn-sm btn-outline-secondary">
+      <a href="javascript:history.go(-1)" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-arrow-left"></i>
-      </router-link>
+      </a>
     </template>
     <div class="m-t">
       <avatar v-model="user" style="font-size: 8em"></avatar>
@@ -14,6 +14,21 @@
           </upload>
         </div>
       </div>
+      <div class="form-group">
+        <label>Nombre de usuario</label>
+        <input id="name" class="form-control" v-model="user.attributes.name" />
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input id="email" class="form-control" v-model="user.attributes.email" />
+      </div>
+      <div class="form-group">
+        <label>Iniciales</label>
+        <input id="iniciales" class="form-control" v-model="user.attributes.iniciales" />
+      </div>
+      <button id="save" type="button" class="btn btn-success" @click="save">
+        <i class="fas fa-save"></i> Guardar
+      </button>
     </div>
   </panel>
 </template>
@@ -29,13 +44,19 @@ export default {
     };
   },
   methods: {
+    save() {
+      this.$root.$api.user
+        .axios(null, {
+          url: "/api/data/user/" + this.user.id,
+          method: "put",
+          data: { data: this.user }
+        })
+        .then(() => {
+          window.history.go(-1);
+        });
+    },
     updateAvatar(avatar) {
       this.user.attributes.avatar = avatar;
-      this.$root.$api.user.axios(null, {
-        url: "/api/data/user/" + this.user.id,
-        method: "put",
-        data: { data: this.user }
-      });
     }
   }
 };

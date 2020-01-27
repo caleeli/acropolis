@@ -33,4 +33,6 @@ beforeEach(() => {
     cy.route('/api/data/user/1/aportes*').as('getAportes/1');
     cy.route('put', '/api/data/aportes/*').as('updateAporte');
     cy.route('post', '/api/data/user/1/aportes').as('postAporte');
+    cy.route('post', '/api/uploadfile').as('uploaded');
+    cy.route('/api/data/aporte/1*').as('getAporte(1)');
 });

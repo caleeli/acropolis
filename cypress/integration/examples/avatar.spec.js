@@ -12,13 +12,16 @@ context('Usuario Miembro', () => {
     })
 
     it('Change avatar image', () => {
+        cy.wait("@getMessages");
         cy.get('#user-avatar').click();
         cy.get('input[type=file]').then(function (el) {
             cy.uploadFile('input[type=file]', 'avatar.jpeg', 'image/jpeg').then(() => {
                 el[0].dispatchEvent(new Event('change', { bubbles: true }));
             });
         })
-        cy.wait(1000);
+        cy.wait("@uploaded");
+        cy.get('#save').click();
+        cy.wait("@getMessages");
     })
 
 })

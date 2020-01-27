@@ -20,6 +20,7 @@ class CreateAportesTable extends Migration
             $table->smallInteger('mes');
             $table->smallInteger('gestion');
             $table->date('fecha_pago');
+            $table->double('a_pagar');
             $table->double('monto');
             $table->string('medio');
             $table->string('recibo');

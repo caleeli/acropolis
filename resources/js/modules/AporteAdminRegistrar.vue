@@ -82,6 +82,7 @@
           <i class="fas fa-save"></i> Guardar registro
         </button>
       </div>
+      <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
     </div>
   </panel>
 </template>
@@ -92,11 +93,13 @@ export default {
   mixins: [window.ResourceMixin],
   data() {
     return {
+      error: "",
       aporte_id: null,
       aportes: this.$api[`user/${this.$root.user.id}/aportes`],
       miembros: this.$api[`/users?sort=name&per_page=200`].array(),
       imagen: null,
       miembro: null,
+      a_pagar: 150,
       mes: String(new Date().getMonth() + 1),
       gestion: String(new Date().getFullYear() + 1),
       fecha_pago: moment().format("YYYY-MM-DD"),
@@ -111,9 +114,10 @@ export default {
     loadRegistro(id) {
       this.aporte_id = this.$route.params.id;
       if (!id) return;
-      this.$api.aporte.load(id).then(aporte => {
+      this.$api.aporte.load(id, { include: "miembro" }).then(aporte => {
         this.miembro = aporte.attributes.miembro_id;
-        this.mes = aporte.attributes.mes;
+        (this.a_pagar = aporte.relationships.miembro.attributes.aporte_mensual),
+          (this.mes = aporte.attributes.mes);
         this.gestion = aporte.attributes.gestion;
         this.fecha_pago = aporte.attributes.fecha_pago;
         this.monto = aporte.attributes.monto;
@@ -131,6 +135,7 @@ export default {
         id: parseInt(this.aporte_id) ? this.aporte_id : undefined,
         attributes: {
           miembro_id: this.miembro,
+          a_pagar: this.a_pagar,
           mes: this.mes,
           gestion: this.gestion,
           fecha_pago: this.fecha_pago,
@@ -139,12 +144,16 @@ export default {
           recibo: this.recibo,
           imagen: this.imagen
         }
-      }).then(() => {
-        this.$router.push({
-          path: "/aportes/ver_todos",
-          query: { miembro: this.miembro }
+      })
+        .then(() => {
+          this.$router.push({
+            path: "/aportes/ver_todos",
+            query: { miembro: this.miembro }
+          });
+        })
+        .catch(error => {
+          this.error = error.response;
         });
-      });
     },
     uploadImage(imagen) {
       this.showUploadError = false;
@@ -152,15 +161,7 @@ export default {
     }
   },
   mounted() {
-    this.loadRegistro(this.$route.params.id);
-  },
-  watch: {
-    $route: {
-      deep: true,
-      handler() {
-        this.loadRegistro(this.$route.params.id);
-      }
-    }
+    this.loadRegistro(parseInt(this.$route.params.id));
   }
 };
 </script>

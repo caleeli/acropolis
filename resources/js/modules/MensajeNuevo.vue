@@ -1,9 +1,9 @@
 <template>
   <panel name="Nuevo mensaje" icon="fas fa-pen" class="panel-success">
     <template slot="actions">
-      <router-link to="/" class="btn btn-sm btn-outline-secondary">
+      <a href="javascript:history.go(-1)" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-arrow-left"></i>
-      </router-link>
+      </a>
     </template>
     <div class="m-t">
       <div>Categoria</div>

@@ -37,5 +37,6 @@ context('Usuario Economía', () => {
         cy.wait('@postAporte');
         cy.wait('@getAportes/1');
         cy.get('.editar:first').click();
+        cy.wait('@getAporte(1)');
     })
 })
