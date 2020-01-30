@@ -2,6 +2,7 @@
   <panel name="Administración" icon="fa fa-user" class="panel-success">
     <template slot="actions">
       <router-link
+        data-cy="import-excel"
         :to="{path:'/admin/import'}"
         class="btn btn-sm btn-outline-secondary"
       >
