@@ -62,7 +62,11 @@ class Aporte extends Model
                         floatval($sheet->getCell("E{$row}")->getCalculatedValue());
                         for ($m = 0;$m < 12;$m++) {
                             $col = static::toColumn(7 + $m * 2);
-                            $pagos[$name][] = floatval($sheet->getCell("{$col}{$row}")->getCalculatedValue());
+                            $pagos[$name][sprintf('%04d-%02d', $gestion, $m + 1)] = [
+                                $gestion,
+                                $m + 1,
+                                floatval($sheet->getCell("{$col}{$row}")->getCalculatedValue())
+                            ];
                         }
                     }
                 }
@@ -73,21 +77,42 @@ class Aporte extends Model
         $aporteMensual = [];
         foreach ($pagos as $nombre => $pp) {
             $moda = [];
+            ksort($pp);
+            $pagos[$nombre] = $pp;
             foreach ($pp as $pago) {
-                if ($pago) {
-                    isset($moda[$pago]) ? $moda[$pago]++ : $moda[$pago] = 1;
+                if ($pago[2]) {
+                    isset($moda[$pago[2]]) ? $moda[$pago[2]]++ : $moda[$pago[2]] = 1;
                 }
             }
             arsort($moda);
             reset($moda);
             $aporteMensual[$nombre] = key($moda);
         }
-        //
+        // Prepara resumen final
+        $resumen = [];
         foreach ($pagos as $nombre => $pp) {
             $aporte = $aporteMensual[$nombre];
-            $log .= "  $nombre: " . array_sum($pp) . '/' . ($aporte * 12 * $gestiones + @$pendiente2017[$nombre]) . " ($aporte)\n";
+            //$log .= "  $nombre: " . array_sum($pp) . '/' . ($aporte * 12 * $gestiones + @$pendiente2017[$nombre]) . " ($aporte)\n";
+            $aportes = [
+                [
+                    'mes' => 12,
+                    'gestion' => 2017,
+                    'a_pagar' => $pendiente2017[$nombre] ?? 0,
+                    'monto' => 0,
+                ],
+            ];
+            foreach ($pp as $pago) {
+                if ($pago[2]) {
+                    isset($moda[$pago[2]]) ? $moda[$pago[2]]++ : $moda[$pago[2]] = 1;
+                }
+            }
+            $resumen[] = [
+                'name' => $nombre,
+                'aporte_mensual' => $aporteMensual[$nombre],
+                'aportes' => $aportes,
+            ];
         }
-        return $log;
+        return $resumen;
     }
 
     private static function isName($name)
