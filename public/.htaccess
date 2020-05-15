@@ -36,8 +36,12 @@
   ExpiresByType application/ico "access plus 2 month"
 </IfModule>
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE application/json
+  Addtype font/opentype .otf
+  Addtype font/truetype .ttf
+  Addtype image/svg+xml .svg
+
   AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
   AddOutputFilterByType DEFLATE application/rss+xml
   AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
   AddOutputFilterByType DEFLATE application/x-font
