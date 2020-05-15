@@ -38,6 +38,8 @@
 <IfModule mod_deflate.c>
   Addtype font/opentype .otf
   Addtype font/truetype .ttf
+  Addtype font/woff .woff
+  Addtype font/woff2 .woff2
   Addtype image/svg+xml .svg
 
   AddOutputFilterByType DEFLATE application/javascript
@@ -54,7 +56,10 @@
   AddOutputFilterByType DEFLATE application/xml
   AddOutputFilterByType DEFLATE font/opentype
   AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/truetype
   AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE font/woff
+  AddOutputFilterByType DEFLATE font/woff2
   AddOutputFilterByType DEFLATE image/svg+xml
   AddOutputFilterByType DEFLATE image/x-icon
   AddOutputFilterByType DEFLATE text/css
