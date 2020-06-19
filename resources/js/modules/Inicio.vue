@@ -1,16 +1,19 @@
 <template>
-  <div class="principal position-relative">
-    <div class="toolbar">
-      <router-link to="/aportes/ver_todos" class="btn-plus" id="ver-aportes-todos">
-        <i class="fas fa-table"></i>
-      </router-link>
-      <router-link to="/mensaje/tipo" class="btn-plus" id="new-message">
-        <i class="fas fa-pen"></i>
-      </router-link>
+  <div class="principal position-relative h-100 d-flex flex-column">
+    <div>
+      <div class="toolbar">
+        <router-link v-for="tool in toolbar"
+          :key="`toolbar-${tool.id}`"
+          :to="tool.to" class="btn-plus"
+          :id="tool.id">
+          <i :class="tool.icon"></i>
+        </router-link>
+      </div>
+      <img :src="portada" class="portada" />
     </div>
-    <img src="http://www.acropolis.org.bo/wp-content/uploads/2016/08/portada0.jpg" class="portada" />
-    <div style="padding:1em">
-      <mensaje v-for="(opcion,index) in mensajes" :key="index" :value="opcion"></mensaje>
+    <div class="flex-fill d-flex flex-column justify-content-center" style="padding:1em">
+      <!-- mensaje v-for="(opcion,index) in mensajes" :key="index" :value="opcion"></mensaje> -->
+      <dashboard />
     </div>
   </div>
 </template>
@@ -21,6 +24,29 @@ export default {
   mixins: [window.ResourceMixin],
   data() {
     return {
+      portada: require('../../images/portada.jpg'),
+      toolbar: [
+        {
+          id: 'ver-aportes-todos',
+          to: '/aportes/ver_todos',
+          icon: 'fas fa-table',
+        },
+        {
+          id: 'new-message',
+          to: '/mensaje/tipo',
+          icon: 'fas fa-pen',
+        },
+        {
+          id: 'registrar-ingreso',
+          to: '/registrar/ingreso',
+          icon: 'fas fa-plus',
+        },
+        {
+          id: 'registrar-egreso',
+          to: '/registrar/egreso',
+          icon: 'fas fa-minus',
+        },
+      ],
       today: window.moment().format(),
       mensajes: this.$api[`/user/1/messages?include=category&sort=-id`].array()
     };
