@@ -2,6 +2,8 @@
 <svg width="100%" :viewBox="`0 0 ${width} ${height}`">
 	<foreignObject v-for="(node, index) in value" :key="`dashboard-item-${index}`"
 		class="node" :x="cos(index)" :y="sin(index)" :width="80" height="100">
+		<label v-if="node.attributes.total < 0" class="badge badge-danger position-absolute mt-4">{{ format(Math.abs(node.attributes.total)) }}</label>
+		<label v-else class="badge badge-success position-absolute mt-4">{{ format(Math.abs(node.attributes.total)) }}</label>
 		<i class="dashboard-icon" :class="node.attributes.icono"></i>
 		<div class="dashboard-text">{{ node.attributes.nombre }}</div>
 	</foreignObject>
@@ -36,7 +38,7 @@ export default {
 		value: {
 			type: Array,
 			default() {
-				return this.$api.economia_categoria.array({per_page: 10});
+				return this.$api.economia_categoria.array({per_page: 10, filter: ['whereTieneDiario']});
 			}
 		}
 	},
@@ -49,6 +51,11 @@ export default {
 		};
 	},
 	methods: {
+		format(value) {
+			return new Intl.NumberFormat("en-US", {style: 'currency', currency: 'BOB' })
+				.format(value)
+				.substr(3);
+		},
 		porcentaje() {
 			return 0.3 * this.radio * 2 * Math.PI;
 		},
@@ -78,7 +85,11 @@ export default {
 <style>
 .node {
   color: #014B41;
-  text-align: center;
+	text-align: center;
+	position: relative;
+}
+.node label {
+	opacity: 0.8;
 }
 .dashboard-icon {
 	font-size: 4em;
