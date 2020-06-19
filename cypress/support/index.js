@@ -25,6 +25,10 @@ beforeEach(() => {
     // Reset database
     cy.exec('php artisan migrate:fresh --seed');
 
+    // Open page
+    cy.viewport(375, 667);
+    cy.visit('http://127.0.0.1:8000');
+
     // Routes
     cy.server();
     cy.route('/api/data/user/1/messages*').as('getMessages');

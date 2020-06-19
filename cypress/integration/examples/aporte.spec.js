@@ -1,9 +1,6 @@
 
 context('Usuario Miembro', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:9097');
-        cy.viewport(375, 667);
-
         // Login
         cy.get('#login').click();
         cy.get('#email').type('economia-lapaz@nuevaacropolis.org');
