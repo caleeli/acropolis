@@ -10,4 +10,20 @@ class Diario extends Model
     {
         return $query->where('gestion', date('Y'));
     }
+
+    public function scopeWhereCaja($query)
+    {
+        return $query->where('libreta', 'caja');
+    }
+
+    public function scopeWhereCuenta($query)
+    {
+        return $query->where('libreta', 'cuenta');
+    }
+
+    public function scopeNoInicial($query)
+    {
+        return $query->where('detalle', '!=', 'Saldo Inicial')
+            ->where('detalle', '!=', 'Apertura caja');
+    }
 }

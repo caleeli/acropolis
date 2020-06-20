@@ -2,6 +2,7 @@
 
 use App\Diario;
 use App\EconomiaCategoria;
+use App\Miembro;
 use Illuminate\Database\Seeder;
 
 class EconomiaCategoriaSeeder extends Seeder
@@ -14,7 +15,7 @@ class EconomiaCategoriaSeeder extends Seeder
     public function run()
     {
         EconomiaCategoria::create([
-            'nombre' => 'Cuota mensual de miembros cobrada',
+            'nombre' => 'Cuota mensual de miembros',
             'codigo' => 'CT',
             'tipo' => 'ingreso',
             'icono' => 'fas fa-calendar',
@@ -68,7 +69,7 @@ class EconomiaCategoriaSeeder extends Seeder
             'icono' => 'fab fa-firstdraft',
         ]);
         EconomiaCategoria::create([
-            'nombre' => 'Venta de libros, revistas, manuales',
+            'nombre' => 'Venta de libros, revistas...',
             'codigo' => 'LB',
             'tipo' => 'ingreso',
             'icono' => 'fas fa-book',
@@ -145,6 +146,12 @@ class EconomiaCategoriaSeeder extends Seeder
             'tipo' => 'ingreso',
             'icono' => 'fas fa-music',
         ]);
+        EconomiaCategoria::create([
+            'nombre' => 'Alquiler Aula',
+            'codigo' => 'AULA',
+            'tipo' => 'ingreso',
+            'icono' => 'fas fa-user-tie',
+        ]);
 
         EconomiaCategoria::create([
             'nombre' => 'Alquiler',
@@ -159,7 +166,7 @@ class EconomiaCategoriaSeeder extends Seeder
             'icono' => 'fas fa-calendar-day',
         ]);
         EconomiaCategoria::create([
-            'nombre' => 'Servicios (agua, luz, teléfono, otros)',
+            'nombre' => 'Servicios: agua, luz, teléfono...',
             'codigo' => 'SB',
             'tipo' => 'egreso',
             'icono' => 'fas fa-tint',
@@ -332,20 +339,30 @@ class EconomiaCategoriaSeeder extends Seeder
             'tipo' => 'egreso',
             'icono' => 'fas fa-coins',
         ]);
-        $this->cargarDiario(true, false);
-        $this->cargarDiario(false, true);
+        $this->cargarMiembros();
+        $this->cargarDiario(__DIR__ . '/diario.tsv', true, false, 'caja');
+        $this->cargarDiario(__DIR__ . '/diario.tsv', false, true, 'caja');
+        $this->cargarDiario(__DIR__ . '/cuenta.tsv', true, false, 'cuenta');
+        $this->cargarDiario(__DIR__ . '/cuenta.tsv', false, true, 'cuenta');
     }
 
-    private function cargarDiario($log, $save)
+    private function cargarDiario($path, $log, $save, $libreta)
     {
-        $file = file(__DIR__ . '/diario.tsv');
+        $file = file($path);
         $saldoCheck = 0;
-        foreach ($file as $fila) {
-            list($fecha, $detalle, $ingreso, $egreso, $saldo, $recibo, $cuenta) = explode("\t", $fila);
+        foreach ($file as $i => $fila) {
+            list(
+                $fecha, $detalle, $ingreso, $egreso, $saldo, $recibo, $cuenta,
+                $nro,
+                $detalle,
+                $coros,
+                $miembro,
+            ) = explode("\t", $fila);
             $fecha = trim($fecha);
             $ingreso = trim($ingreso);
             $egreso = trim($egreso);
             $saldo = trim($saldo);
+            $miembro = trim($miembro);
             if ($fecha === '') {
                 continue;
             }
@@ -363,15 +380,36 @@ class EconomiaCategoriaSeeder extends Seeder
             $saldo = floatval(str_replace(['.',','], ['','.'], $saldo));
             $cuenta = trim($cuenta);
             $saldoCheck += $ingreso - $egreso;
+            if ($miembro) {
+                $miembroO = Miembro::where('nombre', $miembro)->first();
+                if (!$miembroO) {
+                    dd("Miembro no encontrado: $miembro");
+                }
+                $miembro_id = $miembroO->id;
+            } else {
+                $miembro_id = null;
+            }
             if ($log) {
-                print("$fecha, $detalle, $ingreso, $egreso, $saldo, $recibo, $cuenta\n");
+                print("$i: $fecha, $detalle, $ingreso, $egreso, $saldo, $recibo, $cuenta\n");
                 if (abs($saldo - $saldoCheck) > 0.001) {
                     dd('Saldo no coincide:', $saldo, $saldoCheck);
                 }
             }
             if ($save) {
-                Diario::create(compact('gestion', 'fecha', 'detalle', 'ingreso', 'egreso', 'saldo', 'recibo', 'cuenta'));
+                Diario::create(compact('gestion', 'fecha', 'detalle', 'ingreso', 'egreso', 'saldo', 'recibo', 'cuenta', 'libreta', 'miembro_id'));
             }
+        }
+    }
+
+    private function cargarMiembros()
+    {
+        $file = file(__DIR__ . '/miembros.tsv');
+        foreach ($file as $fila) {
+            list(
+                $nombre,
+            ) = explode("\t", $fila);
+            $nombre = trim($nombre);
+            Miembro::create(compact('nombre'));
         }
     }
 }

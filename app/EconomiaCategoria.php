@@ -20,9 +20,9 @@ class EconomiaCategoria extends Model
 
     public function scopeWhereTieneDiario($query)
     {
-        return $query->withCount(['diario' => function ($q) {
-            return $q->whereGestionActual();
-        }])->orderBy('diario_count', 'desc');
+        return $query->withCount(['diario as suma' => function ($q) {
+            return $q->select(DB::raw('sum(ingreso+egreso) as suma'))->whereGestionActual();
+        }])->orderBy('suma', 'desc');
     }
 
     public function diario()

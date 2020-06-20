@@ -13,7 +13,9 @@
     </div>
     <div class="flex-fill d-flex flex-column justify-content-center" style="padding:1em">
       <!-- mensaje v-for="(opcion,index) in mensajes" :key="index" :value="opcion"></mensaje> -->
-      <dashboard />
+      <center>
+        <dashboard />
+      </center>
     </div>
   </div>
 </template>

@@ -83,10 +83,12 @@ class User extends Authenticatable
 
     public function totales()
     {
-        $ultimo = Diario::orderBy('id', 'desc')->limit(1)->first();
-        $ingresos = doubleval(Diario::whereGestionActual()->sum('ingreso'));
-        $egresos = doubleval(Diario::whereGestionActual()->sum('egreso'));
-        $saldo = doubleval($ultimo->saldo);
-        return compact('ingresos', 'egresos', 'saldo');
+        $caja = Diario::whereCaja()->orderBy('id', 'desc')->limit(1)->first();
+        $cuenta = Diario::whereCuenta()->orderBy('id', 'desc')->limit(1)->first();
+        $ingresos = doubleval(Diario::noInicial()->whereGestionActual()->sum('ingreso'));
+        $egresos = doubleval(Diario::noInicial()->whereGestionActual()->sum('egreso'));
+        $saldoCaja = doubleval($caja->saldo);
+        $saldoCuenta = doubleval($cuenta->saldo);
+        return compact('ingresos', 'egresos', 'saldoCaja', 'saldoCuenta');
     }
 }

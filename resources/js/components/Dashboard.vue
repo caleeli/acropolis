@@ -1,9 +1,9 @@
 <template>
 <svg width="100%" :viewBox="`0 0 ${width} ${height}`" class="dashboard-circle">
-	<foreignObject v-for="(node, index) in value" :key="`dashboard-item-${index}`"
+	<foreignObject v-for="(node, index) in ordenado" :key="`dashboard-item-${index}`"
 		class="node" :x="cos(index)" :y="sin(index)" :width="80" height="100">
-		<label v-if="node.attributes.total < 0" class="badge badge-danger position-absolute mt-4">{{ format(Math.abs(node.attributes.total)) }}</label>
-		<label v-else class="badge badge-success position-absolute mt-4">{{ format(Math.abs(node.attributes.total)) }}</label>
+		<label v-if="Number(node.attributes.total) < 0" class="badge badge-danger position-absolute mt-4" style="left: 0px">{{ format(Math.abs(node.attributes.total)) }}</label>
+		<label v-else class="badge badge-success position-absolute mt-4" style="left: 0px">{{ format(Math.abs(node.attributes.total)) }}</label>
 		<i class="dashboard-icon" :class="node.attributes.icono"></i>
 		<div class="dashboard-text">{{ node.attributes.nombre }}</div>
 	</foreignObject>
@@ -12,7 +12,7 @@
 		:stroke-width="ancho"
 	/>
 	<circle :r="radio" :cx="width*0.5" :cy="height*0.5" fill="transparent"
-		stroke="dodgerblue"
+		stroke="#38c172"
 		:stroke-width="ancho"
 		:stroke-dasharray="`${porcentaje()} ${width}`"
 		stroke-dashoffset="0"
@@ -21,22 +21,31 @@
 		stroke="#024b42"
 		stroke-width="1"
 	/>
-	<text :x="width*0.5"
-		:y="height*0.5"
+	<foreignObject
+		:x="width*0.5-radio"
+		:y="height*0.5-radio"
+		:width="2*radio"
+		:height="2*radio"
 		dominant-baseline="middle"
 		text-anchor="middle"
 		font-size="1.5em"
 		fill="black"
 		class="saldo"
 	>
-		{{ format($root.totales.saldo) }}
-	</text>	
+		<div class="d-flex align-items-center h-100">
+			<div class="w-100 text-center">
+				{{ format($root.totales.saldoCaja) }}<br>
+				{{ format($root.totales.saldoCuenta) }}
+			</div>
+		</div>
+	</foreignObject>
 </svg>
 </template>
 
 <script>
 const width = 442;
 const height = 461;
+const initialAngle = Math.PI / 5;
 export default {
   mixins: [window.ResourceMixin],
 	props: {
@@ -55,6 +64,13 @@ export default {
 			ancho: 16,
 		};
 	},
+	computed: {
+		ordenado() {
+			return this.value.sort((a, b) => {
+				return Number(a.attributes.total) < Number(b.attributes.total);
+			});
+		},
+	},
 	methods: {
 		format(value) {
 			return new Intl.NumberFormat("en-US", {style: 'currency', currency: 'BOB' })
@@ -64,6 +80,9 @@ export default {
 		porcentaje() {
 			return (this.$root.totales.ingresos / (this.$root.totales.ingresos + this.$root.totales.egresos)) * this.radio * 2 * Math.PI;
 		},
+		porcentajeOffset() {
+			return initialAngleTubo * this.radio;
+		},
 		cos(index) {
 			return (this.calcAngle(index).cos * .5 + .5) * (width - 80);
 		},
@@ -71,7 +90,7 @@ export default {
 			return (this.calcAngle(index).sin * .5 + .5) * (height - 100);
 		},
 		calcAngle(index) {
-			const a = index / this.value.length * Math.PI * 2;
+			const a = initialAngle + (index / this.value.length * Math.PI * 2);
 			let cos = Math.cos(a);
 			let sin = Math.sin(a);
 			if (Math.abs(cos) > Math.abs(sin)) {
@@ -106,6 +125,7 @@ export default {
 }
 .saldo {
 	cursor: pointer;
+	color: black;
 }
 .dashboard-circle {
 	max-width: 400px;

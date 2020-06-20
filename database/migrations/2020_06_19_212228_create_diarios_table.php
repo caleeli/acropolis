@@ -23,10 +23,13 @@ class CreateDiariosTable extends Migration
             $table->double('saldo');
             $table->string('recibo');
             $table->string('cuenta');
+            $table->string('libreta');
+            $table->bigInteger('miembro_id')->nullable();
             $table->timestamps();
 
             $table->index('gestion');
             $table->index('cuenta');
+            $table->foreign('miembro_id')->references('id')->on('miembros');
         });
     }
 
