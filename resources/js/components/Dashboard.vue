@@ -1,5 +1,5 @@
 <template>
-<svg width="100%" :viewBox="`0 0 ${width} ${height}`">
+<svg width="100%" :viewBox="`0 0 ${width} ${height}`" class="dashboard-circle">
 	<foreignObject v-for="(node, index) in value" :key="`dashboard-item-${index}`"
 		class="node" :x="cos(index)" :y="sin(index)" :width="80" height="100">
 		<label v-if="node.attributes.total < 0" class="badge badge-danger position-absolute mt-4">{{ format(Math.abs(node.attributes.total)) }}</label>
@@ -106,5 +106,8 @@ export default {
 }
 .saldo {
 	cursor: pointer;
+}
+.dashboard-circle {
+	max-width: 400px;
 }
 </style>

@@ -9,7 +9,7 @@
           <i :class="tool.icon"></i>
         </router-link>
       </div>
-      <img :src="portada" class="portada" />
+      <portada />
     </div>
     <div class="flex-fill d-flex flex-column justify-content-center" style="padding:1em">
       <!-- mensaje v-for="(opcion,index) in mensajes" :key="index" :value="opcion"></mensaje> -->
@@ -24,7 +24,6 @@ export default {
   mixins: [window.ResourceMixin],
   data() {
     return {
-      portada: require('../../images/portada.jpg'),
       toolbar: [
         {
           id: 'ver-aportes-todos',
@@ -55,11 +54,6 @@ export default {
 </script>
 
 <style scoped>
-.portada {
-  width: 100%;
-  height: 120px;
-  display: block;
-}
 .principal {
   overflow: auto;
 }
