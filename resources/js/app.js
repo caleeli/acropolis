@@ -44,8 +44,12 @@ const app = new Vue({
         return {
             // Used to open the west menu in compact view
             westOpen: false,
-            menus: [],
             me: this,
+            totales: {
+                ingresos: 0,
+                egresos: 0,
+                saldo: 0,
+            },
             user: window.userId ? this.$api.user.row(window.userId) : null,
         };
     },
@@ -56,18 +60,10 @@ const app = new Vue({
     },
     mounted() {
         if (window.userId) {
-            window.axios.post(
-                `user/${window.userId}`,
-                {
-                    call: {
-                        method: "allMenus",
-                        parameters: {},
-                    }
-                }
-            ).then(response => {
-                this.$set(this, 'menus', response.data.response);
-                return response;
-            });
+            this.$api.user.call(window.userId, 'totales', {})
+                .then(totales => {
+                    this.totales = totales;
+                });
         }
     },
 });

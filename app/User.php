@@ -80,4 +80,13 @@ class User extends Authenticatable
             'ultimo_aporte' => $message->user->ultimo_aporte,
         ]);
     }
+
+    public function totales()
+    {
+        $ultimo = Diario::orderBy('id', 'desc')->limit(1)->first();
+        $ingresos = doubleval(Diario::whereGestionActual()->sum('ingreso'));
+        $egresos = doubleval(Diario::whereGestionActual()->sum('egreso'));
+        $saldo = doubleval($ultimo->saldo);
+        return compact('ingresos', 'egresos', 'saldo');
+    }
 }

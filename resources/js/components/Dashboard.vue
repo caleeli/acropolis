@@ -7,24 +7,29 @@
 		<i class="dashboard-icon" :class="node.attributes.icono"></i>
 		<div class="dashboard-text">{{ node.attributes.nombre }}</div>
 	</foreignObject>
-  	<circle :r="radio" :cx="width*0.5" :cy="height*0.5" fill="transparent"
+	<circle :r="radio" :cx="width*0.5" :cy="height*0.5" fill="transparent"
 		stroke="tomato"
-		:stroke-width="ancho" />
-  	<circle :r="radio" :cx="width*0.5" :cy="height*0.5" fill="transparent"
+		:stroke-width="ancho"
+	/>
+	<circle :r="radio" :cx="width*0.5" :cy="height*0.5" fill="transparent"
 		stroke="dodgerblue"
 		:stroke-width="ancho"
 		:stroke-dasharray="`${porcentaje()} ${width}`"
-		stroke-dashoffset="0" />
-  	<circle :r="radio-10" :cx="width*0.5" :cy="height*0.5" fill="#00aaa0"
+		stroke-dashoffset="0"
+	/>
+	<circle :r="radio-10" :cx="width*0.5" :cy="height*0.5" fill="#00aaa0"
 		stroke="#024b42"
-		stroke-width="1" />
-  	<text :x="width*0.5"
+		stroke-width="1"
+	/>
+	<text :x="width*0.5"
 		:y="height*0.5"
 		dominant-baseline="middle"
 		text-anchor="middle"
 		font-size="1.5em"
-		fill="black">
-		4.000 Bs
+		fill="black"
+		class="saldo"
+	>
+		{{ format($root.totales.saldo) }}
 	</text>	
 </svg>
 </template>
@@ -57,7 +62,7 @@ export default {
 				.substr(3);
 		},
 		porcentaje() {
-			return 0.3 * this.radio * 2 * Math.PI;
+			return (this.$root.totales.ingresos / (this.$root.totales.ingresos + this.$root.totales.egresos)) * this.radio * 2 * Math.PI;
 		},
 		cos(index) {
 			return (this.calcAngle(index).cos * .5 + .5) * (width - 80);
@@ -98,5 +103,8 @@ export default {
 .dashboard-text {
 	font-size: 0.75em;
 	line-height: 1em;
+}
+.saldo {
+	cursor: pointer;
 }
 </style>
