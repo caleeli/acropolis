@@ -20,6 +20,7 @@
 	<circle :r="radio-10" :cx="width*0.5" :cy="height*0.5" fill="#00aaa0"
 		stroke="#024b42"
 		stroke-width="1"
+		@click="verDetalle"
 	/>
 	<foreignObject
 		:x="width*0.5-radio"
@@ -31,6 +32,7 @@
 		font-size="1.5em"
 		fill="black"
 		class="saldo"
+		@click="verDetalle"
 	>
 		<div class="d-flex align-items-center h-100">
 			<div class="w-100 text-center">
@@ -72,6 +74,9 @@ export default {
 		},
 	},
 	methods: {
+		verDetalle() {
+			this.$router.push({ path: '/diario' });
+		},
 		format(value) {
 			return new Intl.NumberFormat("en-US", {style: 'currency', currency: 'BOB' })
 				.format(value)
