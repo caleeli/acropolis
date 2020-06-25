@@ -8,7 +8,7 @@ context('Usuario Miembro', () => {
         cy.get('#submit').click();
     })
 
-    it('Ver aportes mensuales', () => {
+    /*it('Ver aportes mensuales', () => {
         cy.dbSeed('SpecAportesSeeder');
         cy.reload();
         cy.get('.mensaje:first-child').click();
@@ -19,5 +19,5 @@ context('Usuario Miembro', () => {
         cy.get('img.recibo:visible');
         cy.get('a.view-image:first').click();
         cy.get('img.recibo:visible').should('not.exist');
-    })
+    })*/
 })

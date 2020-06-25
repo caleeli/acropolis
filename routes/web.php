@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/excel', 'ExcelController@download')->name('excel.download');
 
 // Socialite routes
 Route::get('/auth/redirect/{provider}', 'SocialController@redirect');

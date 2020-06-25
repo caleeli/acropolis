@@ -42,15 +42,22 @@ export default {
     invalidFeedback: String,
     withoutLabel: Boolean,
   },
+  data() {
+    return {
+      changes: 0,
+    };
+  },
   methods: {
     updateAvatar(avatar) {
       this.value.attributes.avatar = avatar;
     },
     getValue(object, key) {
+      this.changes;
       return get(object, key);
     },
     setValue(object, key, value) {
       set(object, key, value);
+      this.changes++;
     },
   },
 }

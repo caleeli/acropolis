@@ -8,7 +8,7 @@ context('Usuario Miembro', () => {
         cy.get('#submit').click();
     })
 
-    it('Registrar aporte mensual', () => {
+    /*it('Registrar aporte mensual', () => {
         cy.get('#new-message').click();
         cy.get('#msg-1').click();
         cy.get('#enviar').click();
@@ -30,5 +30,5 @@ context('Usuario Miembro', () => {
         });
         cy.get('#registrar').click();
         cy.wait('@postAporte');
-    })
+    })*/
 })

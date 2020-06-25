@@ -1,13 +1,16 @@
 <template>
-  <div>
-    <div class="d-flex">
+  <div class="d-flex flex-column h-100">
+    <div class="d-flex flex-wrap flex-sm-nowrap">
       <b-input-group :class="{invisible: !searchIn}">
         <b-form-input :lazy="true" v-model="searchValue" @change="search" data-cy="tabla.input.search"></b-form-input>
         <b-input-group-append>
-          <b-button variant="outline-secondary" @click="search" data-cy="tabla.search">{{ __('search') }}</b-button>
+          <b-button variant="outline-secondary" @click="search" data-cy="tabla.search">
+            <i class="fas fa-search"></i>
+            <span class="d-none d-sm-inline">{{ __('search') }}</span>
+          </b-button>
         </b-input-group-append>
       </b-input-group>
-      <b-input-group v-if="params.per_page!==-1" style="width: 22em;">
+      <b-input-group v-if="params.per_page!==-1" class="flex-nowrap" style="width: 25em">
         <b-input-group-prepend>
           <b-button variant="outline-secondary" :disabled="params.page<=1" @click="setPage(1)"><i class="fas fa-step-backward"></i></b-button>
           <b-button variant="outline-secondary" :disabled="params.page<=1" @click="setPage(params.page - 1)"><i class="fas fa-caret-left"></i></b-button>
@@ -20,7 +23,7 @@
         </b-input-group-append>
       </b-input-group>
     </div>
-    <b-table :items="value" :fields="fields" data-cy="tabla.table">
+    <b-table :items="value" :fields="fields" responsive data-cy="tabla.table">
       <template v-slot:cell()="data">
         <slot v-if="hasSlot(`cell(${data.field.key})`)" :name="`cell(${data.field.key})`" v-bind="data" :update="update"></slot>
         <formulario-campo v-else-if="inline && data.item.edit"
@@ -40,9 +43,11 @@
       </template>
       <template v-slot:head(actions)="">
         <div class="w-100 text-right">
-          <slot name="toolbar"></slot>
-          <b-button v-if="!readonly" variant="primary" @click="loadData" data-cy="tabla.refresh"><i class="fas fa-sync"></i></b-button>
-          <b-button v-if="!readonly" variant="primary" @click="nuevo" data-cy="tabla.new"><i class="fas fa-plus"></i> {{ __('new') }}</b-button>
+          <div class="btn-group text-nowrap" role="group">
+            <slot name="toolbar"></slot>
+            <b-button v-if="!readonly" variant="primary" @click="loadData" data-cy="tabla.refresh"><i class="fas fa-sync"></i></b-button>
+            <b-button v-if="!readonly" variant="primary" @click="nuevo" data-cy="tabla.new"><i class="fas fa-plus"></i></b-button>
+          </div>
         </div>
       </template>
       <template v-slot:cell(actions)="data">
@@ -60,6 +65,7 @@
     <b-modal
       ref="modal"
       :title="title"
+      hide-backdrop
       @ok="guardar"
     >
       <formulario ref="formulario" :fields="formFieldsF" :value="registro" :api="api" />
@@ -160,8 +166,10 @@ export default {
       }
     },
     setPage(page) {
-      this.params.page = page;
-      this.loadData();
+      if (this.params.page != page) {
+        this.params.page = page;
+        this.loadData();
+      }
     },
     eliminar(registro) {
       this.$bvModal.msgBoxConfirm(this.__('Are you sure to delete this item?'), {
@@ -172,6 +180,7 @@ export default {
         okTitle: this.__('yes'),
         cancelTitle: this.__('no'),
         hideHeaderClose: false,
+        hideBackdrop: true,
         centered: true
       })
       .then(value => {
@@ -260,6 +269,7 @@ export default {
     loadData() {
       this.api.index(this.params, this.value).then(response => {
         this.meta = response.data.meta;
+        if (this.meta.page) this.page = this.meta.page;
         this.value.forEach(row => {
           this.$set(row, 'edit', false);
           // Agrega los campos extra que no son parte de attributes o relationships o id o $type

@@ -354,7 +354,7 @@ class EconomiaCategoriaSeeder extends Seeder
             list(
                 $fecha, $detalle, $ingreso, $egreso, $saldo, $recibo, $cuenta,
                 $nro,
-                $detalle,
+                $detalle2,
                 $coros,
                 $miembro,
             ) = explode("\t", $fila);

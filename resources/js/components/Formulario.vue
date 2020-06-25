@@ -6,6 +6,7 @@
         :value="value"
         :state="state"
         :invalid-feedback="feedback(field.key)"
+        :autofocus="index===0"
       />
     </template>
     <div class="text-right w-100 mt-2" data-cy="form.status">

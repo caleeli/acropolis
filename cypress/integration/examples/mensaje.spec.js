@@ -30,11 +30,11 @@ context('Usuario Economía', () => {
         cy.wait(1000);
     })
 
-    it('Ver mensaje', () => {
+    /*it('Ver mensaje', () => {
         cy.dbSeed('SpecAportesSeeder');
         cy.reload();
         cy.get('.mensaje:first-child').click();
         cy.wait(1000);
         cy.get('#back').click();
-    })
+    })*/
 })

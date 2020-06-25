@@ -32,12 +32,24 @@
 		font-size="1.5em"
 		fill="black"
 		class="saldo"
-		@click="verDetalle"
 	>
 		<div class="d-flex align-items-center h-100">
 			<div class="w-100 text-center">
-				{{ format($root.totales.saldoCaja) }}<br>
-				{{ format($root.totales.saldoCuenta) }}
+				<router-link
+					class="text-dark"
+					:to="{ path:'/diario', query: { filter: 'whereCaja', title: 'Caja' } }"
+					data-cy="saldo-caja"
+				>
+					{{ format($root.totales.saldoCaja) }}
+				</router-link>
+				<br>
+				<router-link
+					class="text-dark"
+					:to="{ path:'/diario', query: { filter: 'whereCuenta', title: 'Cuenta' } }"
+					data-cy="saldo-cuenta"
+				>
+					{{ format($root.totales.saldoCuenta) }}
+				</router-link>
 			</div>
 		</div>
 	</foreignObject>
