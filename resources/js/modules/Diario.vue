@@ -17,6 +17,9 @@
         <template v-slot:toolbar>
           <b-button variant="success" :href="`${apiExcel}`" target="_blank" data-cy="tabla.excel"><i class="fas fa-file-excel"></i></b-button>
         </template>
+        <template v-slot:cell(attributes.fecha)="{ item }">
+          {{ format_date(item.attributes.fecha) }}
+        </template>
         <template v-slot:cell(attributes.ingreso)="{ item }">
           {{ format(item.attributes.ingreso) }}
         </template>
@@ -79,7 +82,15 @@ export default {
   },
   computed: {
     apiExcel() {
-      return '/excel/diario';
+      return '/excel/diario?per_page=-1&filter[]=whereCaja&columns=' + encodeURIComponent([
+        'attributes.fecha_f',
+        'attributes.detalle',
+        'attributes.ingreso',
+        'attributes.egreso',
+        'attributes.saldo',
+        'attributes.recibo',
+        'attributes.cuenta',
+      ].join(','));
     },
     params() {
       const params = {
@@ -95,11 +106,14 @@ export default {
     },
   },
   methods: {
-		format(value) {
-			return new Intl.NumberFormat("en-US", {style: 'currency', currency: 'BOB' })
-				.format(value)
-				.substr(3);
-		},
+    format_date(value) {
+      return moment(value).format('DD-MM-YYYY');
+    },
+    format(value) {
+      return new Intl.NumberFormat("en-US", {style: 'currency', currency: 'BOB' })
+        .format(value)
+        .substr(3);
+    },
   },
 };
 </script>

@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use JDD\Api\Traits\AjaxFilterTrait;
 
 /**
  * @property int $gestion
@@ -20,12 +21,25 @@ use Illuminate\Support\Facades\DB;
  */
 class Diario extends Model
 {
+    use AjaxFilterTrait;
+
     protected $guarded = [];
 
     protected $casts = [
         'fecha' => 'date',
+        'ingreso' => 'double',
+        'egreso' => 'double',
+        'saldo' => 'double',
     ];
 
+    protected $appends = [
+        'fecha_f',
+    ];
+
+    public function getFechaFAttribute()
+    {
+        return $this->fecha->format('d-m-Y');
+    }
     public function scopeWhereGestionActual($query)
     {
         return $query->where('gestion', date('Y'));

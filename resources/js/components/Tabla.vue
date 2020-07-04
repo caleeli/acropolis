@@ -15,7 +15,7 @@
           <b-button variant="outline-secondary" :disabled="params.page<=1" @click="setPage(1)" data-cy="table-toolbar-first"><i class="fas fa-step-backward"></i></b-button>
           <b-button variant="outline-secondary" :disabled="params.page<=1" @click="setPage(params.page - 1)" data-cy="table-toolbar-previous"><i class="fas fa-caret-left"></i></b-button>
         </b-input-group-prepend>
-        <b-form-input v-model="page" :lazy="true" class="text-right"></b-form-input>
+        <b-form-input v-model="page" :lazy="true" class="text-right" @change="setPage"></b-form-input>
         <b-input-group-append>
           <b-button variant="outline-secondary" disabled>/{{ meta.last_page }}</b-button>
           <b-button variant="outline-secondary" :disabled="params.page>=meta.last_page" @click="setPage(params.page + 1)" data-cy="table-toolbar-next"><i class="fas fa-caret-right"></i></b-button>
@@ -142,7 +142,7 @@ export default {
   methods: {
     getDefaults() {
       const object = {};
-      this.formFields.forEach(field => field.default ? object[field.key] = field.default : null);
+      this.formFields.forEach(field => field.default ? set(object, field.key, field.default) : null);
       return object;
     },
     update(row) {
@@ -167,7 +167,9 @@ export default {
         } else {
           this.params.filter[index] = filter;
         }
-        this.setPage(1);
+        this.page = 1;
+        this.params.page = this.page;
+        this.loadData();
       }
     },
     setPage(page) {
@@ -277,23 +279,12 @@ export default {
         if (this.meta.page) this.page = this.meta.page;
         this.value.forEach(row => {
           this.$set(row, 'edit', false);
-          // Agrega los campos extra que no son parte de attributes o relationships o id o $type
-          this.fields.forEach(field => {
-            if (field.extra) {
-              this.$set(row, field.key, field.default ||  null);
-            }
-          });
         });
       });
     },
   },
   mounted() {
     this.loadData(); 
-  },
-  watch: {
-    page(page) {
-      this.setPage(page);
-    }
   },
 }
 </script>
