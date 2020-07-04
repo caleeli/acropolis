@@ -38,7 +38,7 @@ class Diario extends Model
 
     public function getFechaFAttribute()
     {
-        return $this->fecha->format('d-m-Y');
+        return $this->fecha ? $this->fecha->format('d-m-Y') : '';
     }
     public function scopeWhereGestionActual($query)
     {
@@ -68,5 +68,37 @@ class Diario extends Model
             ->where('id', '<', $this->id)
             ->sum(DB::raw('ingreso-egreso'))
             + $this->ingreso - $this->egreso;
+    }
+
+    public static function seguimiento($cuenta = '', $libreta = null)
+    {
+        $format = '%W-%Y';
+        $query = Diario::select(DB::raw(
+            "strftime('{$format}', fecha) as periodo,
+                sum(ingreso) as ingresos,
+                sum(egreso) as egresos 
+            "
+        ))
+        ->groupBy(DB::raw("strftime('{$format}', fecha)"));
+        if ($cuenta) {
+            $query->where('cuenta', $cuenta);
+        }
+        if ($libreta) {
+            $query->where('libreta', $libreta);
+        }
+        $rows = $query->orderBy('id')->get();
+        $data = [];
+        $ingresos = 0;
+        $egresos = 0;
+        foreach ($rows as $row) {
+            $ingresos += $row['ingresos'];
+            $egresos += $row['egresos'];
+            $data[] = [
+                'periodo' => $row['periodo'],
+                'ingresos' => $ingresos,
+                'egresos' => $egresos,
+            ];
+        }
+        return $data;
     }
 }

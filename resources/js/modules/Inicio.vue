@@ -13,8 +13,16 @@
     </div>
     <div class="flex-fill d-flex flex-column justify-content-center" style="padding:1em">
       <!-- mensaje v-for="(opcion,index) in mensajes" :key="index" :value="opcion"></mensaje> -->
-      <center>
-        <dashboard />
+      <center class="d-flex align-items-center justify-content-center">
+        <dashboard @hover="hoverNode" />
+        <chart
+            :data="data"
+            :title="chartTitle"
+            label-field="periodo"
+            :value-field="['ingresos','egresos']"
+            :colors="['lightgreen','salmon']"
+            type="line"
+        />
       </center>
     </div>
   </div>
@@ -26,6 +34,8 @@ export default {
   mixins: [window.ResourceMixin],
   data() {
     return {
+      chartTitle: 'total ingresos, egresos acumulados (por semana)',
+      data: [],
       toolbar: [
         {
           id: 'ver-aportes-todos',
@@ -51,7 +61,22 @@ export default {
       today: window.moment().format(),
       mensajes: this.$api[`/user/1/messages?include=category&sort=-id`].array()
     };
-  }
+  },
+  methods: {
+    hoverNode(node, libreta) {
+      this.chartTitle = `Acumulado: ${node.attributes.nombre} (por semana)`;
+      this.runReport(node && node.attributes.codigo, libreta);
+    },
+    runReport(cuenta, libreta) {
+      this.$api.diario.call(null, 'seguimiento', { cuenta, libreta })
+        .then(response => {
+          this.data = response;
+        });
+    },
+  },
+  mounted() {
+    this.runReport();
+  },
 };
 </script>
 

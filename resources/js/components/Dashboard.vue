@@ -1,7 +1,9 @@
 <template>
 <svg width="100%" :viewBox="`0 0 ${width} ${height}`" class="dashboard-circle">
 	<foreignObject v-for="(node, index) in ordenado" :key="`dashboard-item-${index}`"
-		class="node" :x="cos(index)" :y="sin(index)" :width="80" height="100">
+		class="node" :x="cos(index)" :y="sin(index)" :width="80" height="100"
+		style="cursor: pointer;"
+		@mousemove="mousemove(node)">
 		<label v-if="Number(node.attributes.total) < 0" class="badge badge-danger position-absolute mt-4" style="left: 0px">{{ format(Math.abs(node.attributes.total)) }}</label>
 		<label v-else class="badge badge-success position-absolute mt-4" style="left: 0px">{{ format(Math.abs(node.attributes.total)) }}</label>
 		<i class="dashboard-icon" :class="node.attributes.icono"></i>
@@ -35,21 +37,24 @@
 	>
 		<div class="d-flex align-items-center h-100">
 			<div class="w-100 text-center">
-				<router-link
-					class="text-dark"
-					:to="{ path:'/diario', query: { filter: 'whereCaja', title: 'Caja' } }"
-					data-cy="saldo-caja"
-				>
-					{{ format($root.totales.saldoCaja) }}
-				</router-link>
-				<br>
-				<router-link
-					class="text-dark"
-					:to="{ path:'/diario', query: { filter: 'whereCuenta', title: 'Cuenta' } }"
-					data-cy="saldo-cuenta"
-				>
-					{{ format($root.totales.saldoCuenta) }}
-				</router-link>
+				<div @mousemove="mouseCaja">
+					<router-link
+						class="text-dark"
+						:to="{ path:'/diario', query: { filter: 'whereCaja', title: 'Caja' } }"
+						data-cy="saldo-caja"
+					>
+						{{ format($root.totales.saldoCaja) }}
+					</router-link>
+				</div>
+				<div @mousemove="mouseCuenta">
+					<router-link
+						class="text-dark"
+						:to="{ path:'/diario', query: { filter: 'whereCuenta', title: 'Cuenta' } }"
+						data-cy="saldo-cuenta"
+					>
+						{{ format($root.totales.saldoCuenta) }}
+					</router-link>
+				</div>
 			</div>
 		</div>
 	</foreignObject>
@@ -72,6 +77,8 @@ export default {
 	},
 	data () {
 		return {
+			overNode: null,
+			overLibreta: null,
 			width,
 			height,
 			radio: width *0.2,
@@ -86,6 +93,35 @@ export default {
 		},
 	},
 	methods: {
+		mouseCuenta() {
+			if ( null !== this.overNode || 'cuenta' !== this.overLibreta) {
+				this.overNode = null;
+				this.overLibreta = 'cuenta';
+				this.$emit('hover', {
+					attributes: {
+						nombre: 'en cuenta bancaria',
+					}
+				}, 'cuenta');
+			}
+		},
+		mouseCaja() {
+			if ( null !== this.overNode || 'caja' !== this.overLibreta) {
+				this.overNode = null;
+				this.overLibreta = 'caja';
+				this.$emit('hover', {
+					attributes: {
+						nombre: 'en caja',
+					}
+				}, 'caja');
+			}
+		},
+		mousemove(node) {
+			if ( node !== this.overNode || null !== this.overLibreta ) {
+				this.overNode = node;
+				this.overLibreta = null;
+				this.$emit('hover', node, null);
+			}
+		},
 		verDetalle() {
 			this.$router.push({ path: '/diario' });
 		},
