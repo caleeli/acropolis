@@ -12,14 +12,14 @@
       </b-input-group>
       <b-input-group v-if="params.per_page!==-1" class="flex-nowrap" style="width: 25em">
         <b-input-group-prepend>
-          <b-button variant="outline-secondary" :disabled="params.page<=1" @click="setPage(1)"><i class="fas fa-step-backward"></i></b-button>
-          <b-button variant="outline-secondary" :disabled="params.page<=1" @click="setPage(params.page - 1)"><i class="fas fa-caret-left"></i></b-button>
+          <b-button variant="outline-secondary" :disabled="params.page<=1" @click="setPage(1)" data-cy="table-toolbar-first"><i class="fas fa-step-backward"></i></b-button>
+          <b-button variant="outline-secondary" :disabled="params.page<=1" @click="setPage(params.page - 1)" data-cy="table-toolbar-previous"><i class="fas fa-caret-left"></i></b-button>
         </b-input-group-prepend>
         <b-form-input v-model="page" :lazy="true" class="text-right"></b-form-input>
         <b-input-group-append>
           <b-button variant="outline-secondary" disabled>/{{ meta.last_page }}</b-button>
-          <b-button variant="outline-secondary" :disabled="params.page>=meta.last_page" @click="setPage(params.page + 1)"><i class="fas fa-caret-right"></i></b-button>
-          <b-button variant="outline-secondary" :disabled="params.page>=meta.last_page" @click="setPage(meta.last_page)"><i class="fas fa-step-forward"></i></b-button>
+          <b-button variant="outline-secondary" :disabled="params.page>=meta.last_page" @click="setPage(params.page + 1)" data-cy="table-toolbar-next"><i class="fas fa-caret-right"></i></b-button>
+          <b-button variant="outline-secondary" :disabled="params.page>=meta.last_page" @click="setPage(meta.last_page)" data-cy="table-toolbar-last"><i class="fas fa-step-forward"></i></b-button>
         </b-input-group-append>
       </b-input-group>
     </div>
@@ -135,11 +135,16 @@ export default {
         last_page: 0,
       },
       page: this.params.page || 1,
-      registro: cloneDeep(nuevoRegistro),
+      registro: Object.assign(cloneDeep(nuevoRegistro), this.getDefaults()),
       error: '',
     };
   },
   methods: {
+    getDefaults() {
+      const object = {};
+      this.formFields.forEach(field => field.default ? object[field.key] = field.default : null);
+      return object;
+    },
     update(row) {
       this.api.save(row).catch(res => {
         this.error = res.response.data.message;
@@ -260,9 +265,9 @@ export default {
     nuevo() {
       this.error = '';
       if (this.inline) {
-        this.value.push(cloneDeep(nuevoRegistroInline));
+        this.value.push(Object.assign(cloneDeep(nuevoRegistroInline), this.getDefaults()));
       } else {
-        this.registro = cloneDeep(nuevoRegistro);
+        this.$set(this, 'registro', Object.assign(cloneDeep(nuevoRegistro), this.getDefaults()));
         this.$refs.modal.show();
       }
     },

@@ -18,10 +18,10 @@ class CreateDiariosTable extends Migration
             $table->char('gestion', 4);
             $table->date('fecha');
             $table->string('detalle');
-            $table->double('ingreso');
-            $table->double('egreso');
+            $table->double('ingreso')->default(0);
+            $table->double('egreso')->default(0);
             $table->double('saldo');
-            $table->string('recibo');
+            $table->string('recibo')->nullable();
             $table->string('cuenta');
             $table->string('libreta');
             $table->bigInteger('miembro_id')->nullable();

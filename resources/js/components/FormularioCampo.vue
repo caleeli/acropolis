@@ -3,7 +3,7 @@
     <avatar v-model="value.attributes.avatar" style="font-size: 3em"></avatar>
     <div class="form-group">
       <div class="d-inline-block">
-        <upload v-model="value.attributes.avatar" @change="updateAvatar">
+        <upload v-model="value.attributes.avatar" @change="updateAvatar" :autofocus="autofocus">
           <button type="button" class="btn btn-primary" :data-cy="`field.${field.key}`">Cambiar imagen</button>
         </upload>
       </div>
@@ -17,7 +17,7 @@
     :invalid-feedback="invalidFeedback"
     :data-cy="`fieldset.${field.key}`" 
   >
-    <component :is="field.component" v-bind="field.properties" :data-cy="`field.${field.key}`" :value="getValue(value, field.key)" @change="setValue(value, field.key, $event)" />
+    <component :is="field.component" v-bind="field.properties" :data-cy="`field.${field.key}`" :value="getValue(value, field.key)" @change="setValue(value, field.key, $event)" :autofocus="autofocus" />
   </b-form-group>
   <b-form-group
     v-else
@@ -27,7 +27,7 @@
     :invalid-feedback="invalidFeedback"
     :data-cy="`fieldset.${field.key}`" 
   >
-    <b-form-input class="form-control" :type="field.type || 'text'" :data-cy="`field.${field.key}`" :value="getValue(value, field.key)" @change="setValue(value, field.key, $event)" />
+    <b-form-input class="form-control" :type="field.type || 'text'" :data-cy="`field.${field.key}`" :value="getValue(value, field.key)" @change="setValue(value, field.key, $event)" :autofocus="autofocus" />
   </b-form-group>
 </template>
 
@@ -41,6 +41,7 @@ export default {
     state: Boolean,
     invalidFeedback: String,
     withoutLabel: Boolean,
+    autofocus: Boolean,
   },
   data() {
     return {

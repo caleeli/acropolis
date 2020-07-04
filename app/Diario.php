@@ -2,12 +2,29 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property int $gestion
+ * @property Carbon $fecha
+ * @property string $detalle
+ * @property float $ingreso
+ * @property float $egreso
+ * @property float $saldo
+ * @property string $recibo
+ * @property string $cuenta
+ * @property string $libreta
+ * @property int $miembro_id
+ */
 class Diario extends Model
 {
     protected $guarded = [];
+
+    protected $casts = [
+        'fecha' => 'date',
+    ];
 
     public function scopeWhereGestionActual($query)
     {

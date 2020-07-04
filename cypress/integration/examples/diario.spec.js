@@ -10,6 +10,6 @@ context('Diario de ingresos y egresos', () => {
 
     it('Ver saldo en caja', () => {
         cy.get('[data-cy=saldo-caja]').click();
-
+        cy.get('[data-cy="tabla.row.edit"]:first').click();
     })
 })

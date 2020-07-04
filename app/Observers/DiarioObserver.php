@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Diario;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class DiarioObserver
@@ -18,6 +19,20 @@ class DiarioObserver
         $diario->saldo = Diario::where('libreta', $diario->libreta)
             ->sum(DB::raw('ingreso-egreso'))
             + $diario->ingreso - $diario->egreso;
+    }
+
+    /**
+     * Handle the Diario "saving" event.
+     *
+     * @param  \App\Diario  $diario
+     * @return void
+     */
+    public function saving(Diario $diario)
+    {
+        if (!$diario->fecha) {
+            $diario->fecha = Carbon::now();
+        }
+        $diario->gestion = $diario->fecha->format('Y');
     }
 
     /**
