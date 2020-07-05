@@ -106,7 +106,7 @@ export default {
       default() {
         return {
           page: 1,
-          per_page: 25,
+          per_page: 5,
           meta: "pagination",
         };
       },
@@ -274,6 +274,7 @@ export default {
       }
     },
     loadData() {
+      this.value.splice(0);
       this.api.index(this.params, this.value).then(response => {
         this.meta = response.data.meta;
         if (this.meta.page) this.page = this.meta.page;

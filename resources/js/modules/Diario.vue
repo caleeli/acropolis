@@ -57,7 +57,7 @@ export default {
         { key: "attributes.detalle", label: "Detalle", create: true, edit: true },
         { key: "attributes.ingreso", label: "Ingreso", create: true, edit: true },
         { key: "attributes.egreso", label: "Egreso", create: true, edit: true },
-        { key: "attributes.cuenta", label: "Cuenta/Área", create: true, edit: true, component: "b-form-select",
+        { key: "attributes.cuenta", label: "Categoría", create: true, edit: true, component: "b-form-select",
           properties: {
             options: this.$api.economia_categorias.array({per_page: -1, filter:['whereNotNull,codigo'], sort:'+nombre'}),
             'value-field': 'attributes.codigo',
@@ -75,6 +75,13 @@ export default {
           default: moment().format('YYYY-MM-DD'),
           properties: {
             type: 'date',
+          },
+        },
+        { key: "attributes.miembro_id", label: "Miembro", create: true, edit: true, component: "b-form-select",
+          properties: {
+            options: this.$api.miembro.array({per_page: -1, sort:'+nombre'}, [{id:null, attributes:{nombre:''}}]),
+            'value-field': 'id',
+            'text-field': 'attributes.nombre',
           },
         },
       ],

@@ -34,10 +34,10 @@ export default {
   mixins: [window.ResourceMixin],
   data() {
     return {
-      chartTitle: 'total ingresos, egresos acumulados (por semana)',
+      chartTitle: 'Acumulado: total ingresos y egresos (por semana)',
       data: [],
       toolbar: [
-        {
+        /*{
           id: 'ver-aportes-todos',
           to: '/aportes/ver_todos',
           icon: 'fas fa-table',
@@ -46,16 +46,11 @@ export default {
           id: 'new-message',
           to: '/mensaje/tipo',
           icon: 'fas fa-pen',
-        },
+        },*/
         {
           id: 'registrar-ingreso',
           to: '/registrar/ingreso',
           icon: 'fas fa-plus',
-        },
-        {
-          id: 'registrar-egreso',
-          to: '/registrar/egreso',
-          icon: 'fas fa-minus',
         },
       ],
       today: window.moment().format(),

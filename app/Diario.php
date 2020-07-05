@@ -72,7 +72,7 @@ class Diario extends Model
 
     public static function seguimiento($cuenta = '', $libreta = null)
     {
-        $format = '%W-%Y';
+        $format = '%Y:%W';
         $query = Diario::select(DB::raw(
             "strftime('{$format}', fecha) as periodo,
                 sum(ingreso) as ingresos,
@@ -86,7 +86,7 @@ class Diario extends Model
         if ($libreta) {
             $query->where('libreta', $libreta);
         }
-        $rows = $query->orderBy('id')->get();
+        $rows = $query->orderBy('periodo')->get();
         $data = [];
         $ingresos = 0;
         $egresos = 0;
