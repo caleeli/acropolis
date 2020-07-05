@@ -89,7 +89,8 @@ export default {
   },
   computed: {
     apiExcel() {
-      return '/excel/diario?per_page=-1&filter[]=whereCaja&columns=' + encodeURIComponent([
+      return '/excel/diario?per_page=-1&filter[]=' + this.$route.query.filter +
+        '&columns=' + encodeURIComponent([
         'attributes.fecha_f',
         'attributes.detalle',
         'attributes.ingreso',
