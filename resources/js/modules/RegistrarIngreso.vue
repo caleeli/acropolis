@@ -29,13 +29,10 @@ export default {
         id: null,
         attributes: {
           detalle: '',
-          ingreso: '',
-          egreso: '',
-          cuenta: '',
           libreta: 'caja',
           recibo: '',
           fecha: moment().format('YYYY-MM-DD'),
-          mimebro_id: null,
+          miembro_id: null,
         },
       },
       formFields: [
