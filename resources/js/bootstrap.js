@@ -3,6 +3,8 @@ window._ = require('lodash');
 const Vue = window.Vue = require('vue');
 window.moment = require('moment');
 
+// Vue global functions
+Vue.prototype.moment = window.moment;
 Vue.prototype.format_number = (number, decimals = 2, dec_point = '.', thousands_sep = ',') => {
     var n = !isFinite(+number) ? 0 : + number, 
     prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),

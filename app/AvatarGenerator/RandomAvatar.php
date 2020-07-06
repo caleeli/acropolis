@@ -2,6 +2,8 @@
 
 namespace App\AvatarGenerator;
 
+use Illuminate\Support\Facades\Cache;
+
 class RandomAvatar
 {
     const base = 'https://img.icons8.com';
@@ -211,16 +213,49 @@ class RandomAvatar
     ];
 
     /**
-     * Get a rendom icons from group
+     * Get a random icon from group
      *
      * @param string $group
      * @param string $size 2x 4x...
      *
      * @return string
      */
-    public function generate($group = 'color', $size = '2x')
+    public function generate($group = 'color', $size = '2x', $amount = 1)
     {
         $url = static::base . "/{$group}/{$size}/" . $this->icons[$group][array_rand($this->icons[$group], 1)];
         return file_get_contents($url);
+    }
+
+    /**
+     * Get random icon URLs
+     *
+     * @param string $amount
+     * @param string $group
+     * @param string $size 2x 4x...
+     *
+     * @return string
+     */
+    public function many($amount, $group = 'color', $size = '2x')
+    {
+        $indexes = array_rand($this->icons[$group], $amount);
+        $indexes = is_array($indexes) ? $indexes : [$indexes];
+        $urls = [];
+        foreach ($indexes as $index) {
+            $urls[] = static::base . "/{$group}/{$size}/" . $this->icons[$group][$index];
+        }
+        return $urls;
+    }
+
+    /**
+     * Get a image by url
+     *
+     * @param [type] $url
+     * @return void
+     */
+    public function getCachedByUrl($url)
+    {
+        return Cache::rememberForever("icon8:{$url}", function () use ($url) {
+            return file_get_contents($url);
+        });
     }
 }

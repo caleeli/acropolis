@@ -24,6 +24,10 @@
         <div id="app" class="flex-center position-ref full-height">
             @yield('content')
         </div>
+        <script>
+            window._locale = '{{ app()->getLocale() }}';
+            window._translations = {!! cache('translations') !!};
+        </script>
         @foreach (config('plugins.javascript_before') as $javascript)
         <script src="{{ $javascript }}?{{filemtime(public_path($javascript))}}" defer></script>
         @endforeach

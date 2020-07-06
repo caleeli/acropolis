@@ -19,6 +19,7 @@ class CreateMiembrosTable extends Migration
             $table->json('avatar')->nullable();
             $table->boolean('activo')->default(true);
             $table->double('aporte_mensual')->default(150);
+            $table->double('saldo_pendiente')->default(0);
             $table->integer('ultimo_aporte_mes')->nullable();
             $table->integer('ultimo_aporte_gestion')->nullable();
             $table->timestamps();

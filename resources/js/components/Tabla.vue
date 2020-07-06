@@ -6,7 +6,7 @@
         <b-input-group-append>
           <b-button variant="outline-secondary" @click="search" data-cy="tabla.search">
             <i class="fas fa-search"></i>
-            <span class="d-none d-sm-inline">{{ __('buscar') }}</span>
+            <span class="d-none d-sm-inline">{{ __('search') }}</span>
           </b-button>
         </b-input-group-append>
       </b-input-group>
@@ -202,7 +202,7 @@ export default {
     },
     editar(registro) {
       this.error = '';
-      this.registro = registro;
+      this.registro = cloneDeep(registro);
       this.$refs.modal.show();
     },
     guardar(bvModalEvt) {

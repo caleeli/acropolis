@@ -14,8 +14,18 @@ class Miembro extends Model
         'avatar' => 'array',
     ];
 
+    protected $guarded = [];
+
     public function aportes()
     {
         return $this->hasMany(Aporte::class);
+    }
+
+    public static function totales()
+    {
+        return [
+            'totalAporte' => Aporte::where('gestion', date('Y'))->sum('monto'),
+            'totalPendiente' => Miembro::where('activo', true)->sum('saldo_pendiente'),
+        ];
     }
 }

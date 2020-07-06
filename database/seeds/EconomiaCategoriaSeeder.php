@@ -6,6 +6,7 @@ use App\Diario;
 use App\EconomiaCategoria;
 use App\Miembro;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class EconomiaCategoriaSeeder extends Seeder
@@ -410,13 +411,14 @@ class EconomiaCategoriaSeeder extends Seeder
     {
         $file = file(__DIR__ . '/miembros.tsv');
         $random = new RandomAvatar();
+        $urls = $random->many(count($file));
         $bar = $this->command->getOutput()->createProgressBar(count($file));
         $bar->start();
-        foreach ($file as $fila) {
+        foreach ($file as $i => $fila) {
             list($nombre, $activo) = explode("\t", $fila);
             $nombre = trim($nombre);
             $avatar = null;
-            $image = $random->generate('color');
+            $image = $random->getCachedByUrl($urls[$i]);
             $imageName = 'avatar.png';
             $path = uniqid('up', true) . "/{$imageName}";
             Storage::drive('public')->put($path, $image);
@@ -474,6 +476,9 @@ class EconomiaCategoriaSeeder extends Seeder
             $this->cargarAporte(12, $gestion, $dic, $dicRec, $miembro);
             if ($mensual) {
                 $miembro->aporte_mensual = $mensual;
+            }
+            if ($pendiente2) {
+                $miembro->saldo_pendiente = $pendiente2;
             }
             $miembro->save();
         }
