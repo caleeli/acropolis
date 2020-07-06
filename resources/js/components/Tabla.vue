@@ -6,7 +6,7 @@
         <b-input-group-append>
           <b-button variant="outline-secondary" @click="search" data-cy="tabla.search">
             <i class="fas fa-search"></i>
-            <span class="d-none d-sm-inline">{{ __('search') }}</span>
+            <span class="d-none d-sm-inline">{{ __('buscar') }}</span>
           </b-button>
         </b-input-group-append>
       </b-input-group>

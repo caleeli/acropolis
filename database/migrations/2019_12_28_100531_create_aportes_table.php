@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAportesTable extends Migration
 {
@@ -15,19 +15,15 @@ class CreateAportesTable extends Migration
     {
         Schema::create('aportes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
             $table->unsignedBigInteger('miembro_id');
-            $table->smallInteger('mes');
-            $table->smallInteger('gestion');
-            $table->date('fecha_pago');
-            $table->double('a_pagar');
-            $table->double('monto');
-            $table->string('medio');
-            $table->string('recibo');
-            $table->string('imagen');
-            $table->string('verificado_por')->nullable();
+            $table->unsignedBigInteger('diario_id')->nullable();
+            $table->smallInteger('mes')->nullable();
+            $table->smallInteger('gestion')->nullable();
+            $table->double('monto')->default(0);
+            $table->timestamps();
 
-            $table->foreign('miembro_id')->references('id')->on('users');
+            $table->foreign('miembro_id')->references('id')->on('miembros');
+            $table->foreign('diario_id')->references('id')->on('diarios');
         });
     }
 

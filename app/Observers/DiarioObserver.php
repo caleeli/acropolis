@@ -64,6 +64,21 @@ class DiarioObserver
     }
 
     /**
+     * Handle the Diario "created" event.
+     *
+     * @param  \App\Diario  $diario
+     * @return void
+     */
+    public function created(Diario $diario)
+    {
+        /*if ($diario->miembro_id && $diario->cuenta === 'CT') {
+            $diario->aporte()->create([
+                'miembro_id' => $diario->miembro_id,
+            ]);
+        }*/
+    }
+
+    /**
      * Handle the Diario "deleted" event.
      *
      * @param  \App\Diario  $diario

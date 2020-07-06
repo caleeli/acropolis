@@ -21,13 +21,13 @@
           {{ format_date(item.attributes.fecha) }}
         </template>
         <template v-slot:cell(attributes.ingreso)="{ item }">
-          {{ format(item.attributes.ingreso) }}
+          {{ format_number(item.attributes.ingreso) }}
         </template>
         <template v-slot:cell(attributes.egreso)="{ item }">
-          {{ format(item.attributes.egreso) }}
+          {{ format_number(item.attributes.egreso) }}
         </template>
         <template v-slot:cell(attributes.saldo)="{ item }">
-          {{ format(item.attributes.saldo) }}
+          {{ format_number(item.attributes.saldo) }}
         </template>
       </tabla>
     </div>
@@ -116,11 +116,6 @@ export default {
   methods: {
     format_date(value) {
       return moment(value).format('DD-MM-YYYY');
-    },
-    format(value) {
-      return new Intl.NumberFormat("en-US", {style: 'currency', currency: 'BOB' })
-        .format(value)
-        .substr(3);
     },
   },
 };

@@ -48,6 +48,11 @@ export default {
           icon: 'fas fa-pen',
         },*/
         {
+          id: 'miembros',
+          to: '/miembros',
+          icon: 'fas fa-users',
+        },
+        {
           id: 'registrar-ingreso',
           to: '/registrar/ingreso',
           icon: 'fas fa-plus',

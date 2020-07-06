@@ -101,4 +101,9 @@ class Diario extends Model
         }
         return $data;
     }
+
+    public function aporte()
+    {
+        return $this->hasOne(Aporte::class);
+    }
 }

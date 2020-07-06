@@ -6,8 +6,8 @@
     @mousemove="mousemove(node)"
 		@click="verCategoria(node)"
 	>
-    <label v-if="Number(node.attributes.total) < 0" class="badge badge-danger position-absolute mt-4" style="left: 0px; cursor: pointer;">{{ format(Math.abs(node.attributes.total)) }}</label>
-    <label v-else class="badge badge-success position-absolute mt-4" style="left: 0px; cursor: pointer;">{{ format(Math.abs(node.attributes.total)) }}</label>
+    <label v-if="Number(node.attributes.total) < 0" class="badge badge-danger position-absolute mt-4" style="left: 0px; cursor: pointer;">{{ format_number(Math.abs(node.attributes.total)) }}</label>
+    <label v-else class="badge badge-success position-absolute mt-4" style="left: 0px; cursor: pointer;">{{ format_number(Math.abs(node.attributes.total)) }}</label>
     <i class="dashboard-icon" :class="node.attributes.icono"></i>
     <div class="dashboard-text">{{ node.attributes.nombre }}</div>
   </foreignObject>
@@ -45,7 +45,7 @@
             :to="{ path:'/diario', query: { filter: 'whereCaja', title: 'Caja' } }"
             data-cy="saldo-caja"
           >
-            {{ format($root.totales.saldoCaja) }}
+            {{ format_number($root.totales.saldoCaja) }}
           </router-link>
         </div>
         <div @mousemove="mouseCuenta">
@@ -54,7 +54,7 @@
             :to="{ path:'/diario', query: { filter: 'whereCuenta', title: 'Cuenta' } }"
             data-cy="saldo-cuenta"
           >
-            {{ format($root.totales.saldoCuenta) }}
+            {{ format_number($root.totales.saldoCuenta) }}
           </router-link>
         </div>
         <div @mousemove="mouseTotal">
@@ -63,7 +63,7 @@
             :to="{ path:'/diario', query: { title: 'Todos' } }"
             data-cy="saldo-total"
           >
-            {{ format($root.totales.saldoCaja + $root.totales.saldoCuenta) }}
+            {{ format_number($root.totales.saldoCaja + $root.totales.saldoCuenta) }}
           </router-link>
         </div>
       </div>
@@ -149,11 +149,6 @@ export default {
     },
     verDetalle() {
       this.$router.push({ path: '/diario' });
-    },
-    format(value) {
-      return new Intl.NumberFormat("en-US", {style: 'currency', currency: 'BOB' })
-        .format(value)
-        .substr(3);
     },
     porcentaje() {
       return (this.$root.totales.ingresos / (this.$root.totales.ingresos + this.$root.totales.egresos)) * this.radio * 2 * Math.PI;

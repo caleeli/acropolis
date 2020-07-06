@@ -1,9 +1,12 @@
 <?php
 
+use App\Aporte;
+use App\AvatarGenerator\RandomAvatar;
 use App\Diario;
 use App\EconomiaCategoria;
 use App\Miembro;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class EconomiaCategoriaSeeder extends Seeder
 {
@@ -340,9 +343,11 @@ class EconomiaCategoriaSeeder extends Seeder
             'icono' => 'fas fa-coins',
         ]);
         $this->cargarMiembros();
-        $this->cargarDiario(__DIR__ . '/diario.tsv', true, false, 'caja');
+        $this->cargarAportes(2019);
+        $this->cargarAportes(2020);
+        //$this->cargarDiario(__DIR__ . '/diario.tsv', true, false, 'caja');
         $this->cargarDiario(__DIR__ . '/diario.tsv', false, true, 'caja');
-        $this->cargarDiario(__DIR__ . '/cuenta.tsv', true, false, 'cuenta');
+        //$this->cargarDiario(__DIR__ . '/cuenta.tsv', true, false, 'cuenta');
         $this->cargarDiario(__DIR__ . '/cuenta.tsv', false, true, 'cuenta');
     }
 
@@ -404,12 +409,89 @@ class EconomiaCategoriaSeeder extends Seeder
     private function cargarMiembros()
     {
         $file = file(__DIR__ . '/miembros.tsv');
+        $random = new RandomAvatar();
+        $bar = $this->command->getOutput()->createProgressBar(count($file));
+        $bar->start();
+        foreach ($file as $fila) {
+            list($nombre, $activo) = explode("\t", $fila);
+            $nombre = trim($nombre);
+            $avatar = null;
+            $image = $random->generate('color');
+            $imageName = 'avatar.png';
+            $path = uniqid('up', true) . "/{$imageName}";
+            Storage::drive('public')->put($path, $image);
+            $avatar = [
+                'url' => url("storage/{$path}"),
+                'name' => $imageName,
+                'mime' => 'image/png',
+                'path' => $path,
+            ];
+            Miembro::create(compact('nombre', 'avatar', 'activo'));
+            $bar->advance();
+        }
+        $bar->finish();
+    }
+
+    public function cargarAportes($gestion)
+    {
+        $file = file(__DIR__ . '/cuotas' . $gestion . '.tsv');
         foreach ($file as $fila) {
             list(
-                $nombre,
-            ) = explode("\t", $fila);
+                $nombre, $pendiente, $acuenta, $rec,
+                $ene, $eneRec,
+                $feb, $febRec,
+                $mar, $marRec,
+                $abr, $abrRec,
+                $may, $mayRec,
+                $jun, $junRec,
+                $jul, $julRec,
+                $ago, $agoRec,
+                $sep, $sepRec,
+                $oct, $octRec,
+                $nov, $novRec,
+                $dic, $dicRec,
+                $pendiente2,
+                $mensual,
+                $total,
+            ) = explode("\t", substr($fila, 0, -1));
             $nombre = trim($nombre);
-            Miembro::create(compact('nombre'));
+            $mensual = trim($mensual);
+            $miembro = Miembro::where('nombre', $nombre)->first();
+            if (!$miembro) {
+                dd($nombre);
+            }
+            $this->cargarAporte(1, $gestion, $ene, $eneRec, $miembro);
+            $this->cargarAporte(2, $gestion, $feb, $febRec, $miembro);
+            $this->cargarAporte(3, $gestion, $mar, $marRec, $miembro);
+            $this->cargarAporte(4, $gestion, $abr, $abrRec, $miembro);
+            $this->cargarAporte(5, $gestion, $may, $mayRec, $miembro);
+            $this->cargarAporte(6, $gestion, $jun, $junRec, $miembro);
+            $this->cargarAporte(7, $gestion, $jul, $julRec, $miembro);
+            $this->cargarAporte(8, $gestion, $ago, $agoRec, $miembro);
+            $this->cargarAporte(9, $gestion, $sep, $sepRec, $miembro);
+            $this->cargarAporte(10, $gestion, $oct, $octRec, $miembro);
+            $this->cargarAporte(11, $gestion, $nov, $novRec, $miembro);
+            $this->cargarAporte(12, $gestion, $dic, $dicRec, $miembro);
+            if ($mensual) {
+                $miembro->aporte_mensual = $mensual;
+            }
+            $miembro->save();
+        }
+    }
+
+    private function cargarAporte($mes, $gestion, $monto, $rec, Miembro $miembro)
+    {
+        $monto = trim($monto);
+        $rec = trim($rec);
+        if ($monto) {
+            Aporte::create([
+                'miembro_id' => $miembro->id,
+                'mes' => $mes,
+                'gestion' => $gestion,
+                'monto' => $monto,
+            ]);
+            $miembro->ultimo_aporte_mes = $mes;
+            $miembro->ultimo_aporte_gestion = $gestion;
         }
     }
 }
