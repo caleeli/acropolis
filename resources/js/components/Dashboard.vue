@@ -105,7 +105,7 @@ export default {
   },
   methods: {
 		verCategoria(node) {
-			this.$router.push({ path:'/diario', query: { filter: 'where,cuenta,' + JSON.stringify(node.attributes.codigo), title: node.attributes.nombre } });
+			this.$router.push({ path:'/diario', query: { filter: 'where,cuenta,' + JSON.stringify(node.attributes.codigo), title: node.attributes.nombre, cuenta: node.attributes.codigo } });
 		},
     mouseTotal() {
       if ( null !== this.overNode || null !== this.overLibreta) {

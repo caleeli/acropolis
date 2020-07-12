@@ -59,6 +59,7 @@ export default {
         { key: "attributes.ingreso", label: "Ingreso", create: true, edit: true },
         { key: "attributes.egreso", label: "Egreso", create: true, edit: true },
         { key: "attributes.cuenta", label: "Categoría", create: true, edit: true, component: "b-form-select",
+          default: this.$route.query.cuenta,
           properties: {
             options: this.$api.economia_categorias.array({per_page: -1, filter:['whereNotNull,codigo'], sort:'+nombre'}),
             'value-field': 'attributes.codigo',
