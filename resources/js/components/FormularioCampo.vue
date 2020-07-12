@@ -39,31 +39,24 @@ export default {
     field: Object,
     value: Object,
     state: Boolean,
+    changes: Object,
     invalidFeedback: String,
     withoutLabel: Boolean,
     autofocus: Boolean,
-  },
-  data() {
-    return {
-      changes: 0,
-    };
   },
   methods: {
     updateAvatar(avatar) {
       this.value.attributes.avatar = avatar;
     },
     getValue(object, key) {
-      this.changes;
+      this.changes[key];
       return get(object, key);
     },
     setValue(object, key, value) {
       set(object, key, value);
-      this.changes++;
+      this.changes[key]++;
+      this.$emit('change', key, value, { setValue: (k, v) => this.setValue(object, k, v) });
     },
   },
 }
 </script>
-
-<style>
-
-</style>

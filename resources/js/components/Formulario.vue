@@ -5,8 +5,10 @@
         :field="field"
         :value="value"
         :state="state"
+        :changes="changes"
         :invalid-feedback="feedback(field.key)"
         :autofocus="index===0"
+        @change="change"
       />
     </template>
     <div class="text-right w-100 mt-2" data-cy="form.status">
@@ -28,7 +30,10 @@ export default {
     api: Object,
   },
   data() {
+    const changes = {};
+    this.fields.forEach(({key}) => changes[key] = 0);
     return {
+      changes,
       state: null,
       errors: {},
       error: '',
@@ -45,6 +50,9 @@ export default {
     },
   },
   methods: {
+    change(...params) {
+      this.$emit('change', ...params);
+    },
     loadErrors(errors) {
       const loaded = {};
       if (errors) {
@@ -92,7 +100,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

@@ -13,6 +13,7 @@
         :params="params"
         title="Diario"
         :search-in="['attributes.fecha', 'attributes.detalle']"
+        @change="change"
       >
         <template v-slot:toolbar>
           <b-button variant="success" :href="`${apiExcel}`" target="_blank" data-cy="tabla.excel"><i class="fas fa-file-excel"></i></b-button>
@@ -114,6 +115,12 @@ export default {
     },
   },
   methods: {
+    change(key, value, form) {
+      if (key === 'attributes.detalle') {
+        this.$api.diario.call(null, 'guessMemberId', { text: value })
+          .then(id => form.setValue('attributes.miembro_id', id));
+      }
+    },
     format_date(value) {
       return moment(value).format('DD-MM-YYYY');
     },

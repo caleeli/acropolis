@@ -68,7 +68,7 @@
       hide-backdrop
       @ok="guardar"
     >
-      <formulario ref="formulario" :fields="formFieldsF" :value="registro" :api="api" />
+      <formulario ref="formulario" :fields="formFieldsF" :value="registro" :api="api" @change="change" />
       <template slot="modal-ok">
         <i class="fas fa-save"></i> Guardar
       </template>
@@ -140,6 +140,9 @@ export default {
     };
   },
   methods: {
+    change(...params) {
+      this.$emit('change', ...params);
+    },
     getDefaults() {
       const object = {};
       this.formFields.forEach(field => field.default ? set(object, field.key, field.default) : null);

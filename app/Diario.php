@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\AI\MemberFromText;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -105,5 +106,11 @@ class Diario extends Model
     public function aporte()
     {
         return $this->hasOne(Aporte::class);
+    }
+
+    public static function guessMemberId($text)
+    {
+        $predictor = new MemberFromText();
+        return $predictor->predict($text);
     }
 }
