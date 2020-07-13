@@ -76,23 +76,23 @@ export default {
             this.api.refresh(this.value);
             this.success = 'Los cambios se guardaron correctamente';
             this.state = true;
-            accept(res);
+            accept(res.data.data);
           }).catch(res => {
             this.error = this.__(res.response.data.message);
             this.loadErrors(res.response.data.errors);
             this.state = false;
-            reject(res);
+            reject(res.data.data);
           });
         } else {
           this.api.post(this.value).then((res) => {
             this.success = this.__('Los cambios se guardaron correctamente');
             this.state = true;
-            accept(res);
+            accept(res.data.data);
           }).catch(res => {
             this.error = res.response.data.message;
             this.loadErrors(res.response.data.errors);
             this.state = false;
-            reject(res);
+            reject(res.data.data);
           });
         }
       });

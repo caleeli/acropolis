@@ -11,7 +11,7 @@
         :form-fields="formFields"
         :api="api"
         :params="params"
-        title="Miembro"
+        title="Aporte"
         :search-in="['attributes.nombre']"
       >
         <template v-slot:toolbar>
@@ -19,6 +19,12 @@
         </template>
         <template v-slot:cell(attributes.monto)="{ item }">
           {{ format_number(item.attributes.monto) }}
+        </template>
+        <template v-slot:cell(attributes.mes)="{ item }">
+          {{ mes(item.attributes.mes) }}
+        </template>
+        <template v-slot:cell(attributes.fecha)="{ item }">
+          {{ item.attributes.fecha && moment(item.attributes.fecha).format('DD-MM-YYYY') }}
         </template>
       </tabla>
     </div>
@@ -33,6 +39,7 @@ export default {
     id: null,
   },
   data() {
+    const miembros = this.$api.miembro.array({per_page: -1, sort:'+nombre'}, [{id:null, attributes:{nombre:''}}]);
     return {
       //api: this.$api[`miembro/${this.id}/aportes`],
       api: this.$api.aportes,
@@ -41,20 +48,47 @@ export default {
         per_page: 5,
         meta: "pagination",
         filter: ['where,miembro_id,' + this.id],
-        sort: 'gestion,mes',
+        sort: '-gestion,-mes',
       },
       fields: [
+        { key: "attributes.fecha", label: "Fecha"},
         { key: "attributes.mes", label: "Mes"},
         { key: "attributes.gestion", label: "Gestion"},
         { key: "attributes.monto", label: "Monto" },
         { key: "actions", label: "" },
       ],
       formFields: [
-        { key: "attributes.nombre", label: "Nombre", create: true, edit: true },
-        { key: "attributes.avatar", label: "", create: true, edit: true },
-        { key: "attributes.aporte_mensual", label: "Aporte mensual", create: true, edit: true },
+        { key: "attributes.miembro_id", label: "Miembro", create: true, edit: true, component: "b-form-select",
+          default: this.id,
+          properties: {
+            options: miembros,
+            'value-field': 'id',
+            'text-field': 'attributes.nombre',
+          },
+        },
+        { key: "attributes.diario_id", label: "# diario", create: true, edit: true },
+        { key: "attributes.mes", label: "Mes", create: true, edit: true, component: "b-form-select",
+          properties: {
+            options: global.meses,
+            'value-field': 'num',
+            'text-field': 'nombre',
+          },
+        },
+        { key: "attributes.gestion", label: "Gestión", create: true, edit: true },
+        { key: "attributes.monto", label: "Monto", create: true, edit: true },
+        { key: "attributes.fecha", label: "Fecha", create: true, edit: true, component: 'datetime',
+          default: moment().format('YYYY-MM-DD'),
+          properties: {
+            type: 'date',
+          },
+        },
       ],
     };
+  },
+  methods: {
+    mes(num) {
+      return global.meses.find(m => m.num == num).nombre;
+    },
   },
 };
 </script>

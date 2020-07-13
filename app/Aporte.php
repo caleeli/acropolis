@@ -12,7 +12,7 @@ class Aporte extends Model
 
     protected $casts = [
         'imagen' => 'array',
-        'fecha_pago' => 'date',
+        'fecha' => 'date',
     ];
 
     public function scopeConsolidado($query)
@@ -28,7 +28,7 @@ class Aporte extends Model
 
     public function miembro()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Miembro::class);
     }
 
     /**

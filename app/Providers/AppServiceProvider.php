@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Aporte;
 use App\Diario;
+use App\Observers\AporteObserver;
 use App\Observers\DiarioObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Diario::observe(DiarioObserver::class);
+        Aporte::observe(AporteObserver::class);
     }
 }

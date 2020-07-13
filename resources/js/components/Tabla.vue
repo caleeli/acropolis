@@ -210,7 +210,12 @@ export default {
     },
     guardar(bvModalEvt) {
       bvModalEvt.preventDefault();
-      this.$refs.formulario.guardar().then(() => {
+      this.$refs.formulario.guardar().then((model) => {
+        if (this.$refs.formulario.value.id) {
+          this.$emit('updated', model);
+        } else {
+          this.$emit('created', model);
+        }
         this.$refs.modal.hide();
         this.loadData();
       });

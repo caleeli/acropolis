@@ -26,6 +26,21 @@ Vue.prototype.format_number = (number, decimals = 2, dec_point = '.', thousands_
     return s.join(dec);
 };
 
+global.meses = [
+    {num: 1, nombre: 'Enero'},
+    {num: 2, nombre: 'Febrero'},
+    {num: 3, nombre: 'Marzo'},
+    {num: 4, nombre: 'Abril'},
+    {num: 5, nombre: 'Mayo'},
+    {num: 6, nombre: 'Junio'},
+    {num: 7, nombre: 'Julio'},
+    {num: 8, nombre: 'Agosto'},
+    {num: 9, nombre: 'Septiembre'},
+    {num: 10, nombre: 'Octubre'},
+    {num: 11, nombre: 'Noviembre'},
+    {num: 12, nombre: 'Diciembre'},
+];
+
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This

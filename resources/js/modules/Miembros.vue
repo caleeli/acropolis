@@ -26,7 +26,7 @@
           {{ format_number(item.attributes.aporte_mensual) }}
         </template>
         <template v-slot:cell(attributes.ultimo_aporte_mes)="{ item }">
-          {{ item.attributes.ultimo_aporte_mes }} / {{ item.attributes.ultimo_aporte_gestion }}
+          {{ mes(item.attributes.ultimo_aporte_mes) }} / {{ item.attributes.ultimo_aporte_gestion }}
         </template>
         <template v-slot:cell(attributes.saldo_pendiente)="{ item }">
           {{ format_number(item.attributes.saldo_pendiente) }}
@@ -78,6 +78,12 @@ export default {
       this.totalAporte = res.totalAporte;
       this.totalPendiente = res.totalPendiente;
     })
+  },
+  methods: {
+    mes(num) {
+      const mes = global.meses.find(m => m.num == num);
+      return mes && mes.nombre;
+    },
   },
 };
 </script>

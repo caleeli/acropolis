@@ -14,6 +14,7 @@
         title="Diario"
         :search-in="['attributes.fecha', 'attributes.detalle']"
         @change="change"
+        @created="created"
       >
         <template v-slot:toolbar>
           <b-button variant="success" :href="`${apiExcel}`" target="_blank" data-cy="tabla.excel"><i class="fas fa-file-excel"></i></b-button>
@@ -31,20 +32,37 @@
           {{ format_number(item.attributes.saldo) }}
         </template>
       </tabla>
+      <b-modal
+        ref="modalCT"
+        title="Registrar ingreso como Cuota de Miembro"
+        hide-backdrop
+        @ok="guardarCT"
+      >
+        <formulario ref="formCT" :fields="formFieldsCT" :value="registroCT" :api="apiCT" />
+        <template slot="modal-ok">
+          <i class="fas fa-save"></i> Guardar
+        </template>
+        <template slot="modal-cancel">
+          <i class="fas fa-window-close"></i> Cancelar
+        </template>
+      </b-modal>
     </div>
   </panel>
 </template>
 
 <script>
+import RegistrarAporte from "../mixins/RegistrarAporte";
 import moment from "moment";
 
 export default {
   path: "/diario",
-  mixins: [window.ResourceMixin],
+  mixins: [window.ResourceMixin, RegistrarAporte],
   data() {
     return {
+      apiCT: this.$api.aportes,
       api: this.$api.diario,
       fields: [
+        { key: "id", label: "#ID" },
         { key: "attributes.fecha", label: "Fecha" },
         { key: "attributes.detalle", label: "Detalle" },
         { key: "attributes.ingreso", label: "Ingreso", class: "text-right" },
@@ -66,11 +84,12 @@ export default {
             'text-field': 'attributes.nombre',
           },
         },
-        { key: "attributes.libreta", label: "Caja/Cuenta", create: true, edit: true, component: "b-select",
-          default: this.$route.query.title === 'Cuenta' ? 'cuenta' : 'caja',
+        { key: "attributes.miembro_id", label: "Miembro", create: true, edit: true, component: "b-form-select",
           properties: {
-            options: ['caja', 'cuenta'],
-          }
+            options: this.getMiembros(),
+            'value-field': 'id',
+            'text-field': 'attributes.nombre',
+          },
         },
         { key: "attributes.recibo", label: "Recibo", create: true, edit: true },
         { key: "attributes.fecha", label: "Fecha", create: true, edit: true, component: 'datetime',
@@ -79,12 +98,11 @@ export default {
             type: 'date',
           },
         },
-        { key: "attributes.miembro_id", label: "Miembro", create: true, edit: true, component: "b-form-select",
+        { key: "attributes.libreta", label: "Caja/Cuenta", create: true, edit: true, component: "b-select",
+          default: this.$route.query.title === 'Cuenta' ? 'cuenta' : 'caja',
           properties: {
-            options: this.$api.miembro.array({per_page: -1, sort:'+nombre'}, [{id:null, attributes:{nombre:''}}]),
-            'value-field': 'id',
-            'text-field': 'attributes.nombre',
-          },
+            options: ['caja', 'cuenta'],
+          }
         },
       ],
     };
@@ -116,12 +134,6 @@ export default {
     },
   },
   methods: {
-    change(key, value, form) {
-      if (key === 'attributes.detalle') {
-        this.$api.diario.call(null, 'guessMemberId', { text: value })
-          .then(id => form.setValue('attributes.miembro_id', id));
-      }
-    },
     format_date(value) {
       return moment(value).format('DD-MM-YYYY');
     },

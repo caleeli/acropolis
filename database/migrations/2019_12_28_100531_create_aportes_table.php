@@ -20,6 +20,7 @@ class CreateAportesTable extends Migration
             $table->smallInteger('mes')->nullable();
             $table->smallInteger('gestion')->nullable();
             $table->double('monto')->default(0);
+            $table->date('fecha')->nullable();
             $table->timestamps();
 
             $table->foreign('miembro_id')->references('id')->on('miembros');

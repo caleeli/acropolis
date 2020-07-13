@@ -6,7 +6,7 @@
       </a>
     </template>
     <div class="m-t">
-      <formulario ref="formulario" :fields="formFields" :value="registro" :api="api">
+      <formulario ref="formulario" :fields="formFields" :value="registro" :api="api" @change="change">
       </formulario>
     </div>
     <button id="save" type="button" class="btn btn-secondary" @click="cancel">
@@ -15,13 +15,30 @@
     <button id="save" type="button" class="btn btn-success" @click="save">
       <i class="fas fa-save"></i> Guardar
     </button>
+    <b-modal
+      ref="modalCT"
+      title="Registrar ingreso como Cuota de Miembro"
+      hide-backdrop
+      @ok="guardarCT"
+      @cancel="cancel"
+    >
+      <formulario ref="formCT" :fields="formFieldsCT" :value="registroCT" :api="apiCT" />
+      <template slot="modal-ok">
+        <i class="fas fa-save"></i> Guardar
+      </template>
+      <template slot="modal-cancel">
+        <i class="fas fa-window-close"></i> Cancelar
+      </template>
+    </b-modal>
   </panel>
 </template>
 
 <script>
+import RegistrarAporte from '../mixins/RegistrarAporte';
+
 export default {
   path: '/registrar/ingreso',
-  mixins: [window.ResourceMixin],
+  mixins: [window.ResourceMixin, RegistrarAporte],
   data() {
     return {
       api: this.$api.diario,
@@ -46,17 +63,6 @@ export default {
             'text-field': 'attributes.nombre',
           },
         },
-        { key: "attributes.libreta", label: "Caja/Cuenta Banco", create: true, edit: true, component: "b-select",
-          properties: {
-            options: ['caja', 'cuenta'],
-          }
-        },
-        { key: "attributes.recibo", label: "Recibo", create: true, edit: true },
-        { key: "attributes.fecha", label: "Fecha", create: true, edit: true, component: 'datetime',
-          properties: {
-            type: 'date',
-          },
-        },
         { key: "attributes.miembro_id", label: "Miembro", create: true, edit: true, component: "b-form-select",
           properties: {
             options: this.$api.miembro.array({per_page: -1, sort:'+nombre'}, [{id:null, attributes:{nombre:''}}]),
@@ -64,13 +70,30 @@ export default {
             'text-field': 'attributes.nombre',
           },
         },
+        { key: "attributes.recibo", label: "Recibo", create: true, edit: true },
+        { key: "attributes.fecha", label: "Fecha", create: true, edit: true, component: 'datetime',
+          properties: {
+            type: 'date',
+          },
+        },
+        { key: "attributes.libreta", label: "Caja/Cuenta Banco", create: true, edit: true, component: "b-select",
+          properties: {
+            options: ['caja', 'cuenta'],
+          }
+        },
       ]
     };
   },
   methods: {
     save() {
-      this.$refs.formulario.guardar().then(() => {
-        this.$router.go(-1);
+      this.$refs.formulario.guardar().then((diario) => {
+        if (diario.attributes.cuenta === 'CT') {
+          this.created(diario).then(() => {
+            this.$router.go(-1);
+          });
+        } else {
+          this.$router.go(-1);
+        }
       });
     },
     cancel() {
@@ -79,7 +102,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

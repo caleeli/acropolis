@@ -111,6 +111,10 @@ class Diario extends Model
     public static function guessMemberId($text)
     {
         $predictor = new MemberFromText();
-        return $predictor->predict($text);
+        $id = $predictor->predict($text);
+        return [
+            'id' => $id,
+            'attributes' => Miembro::find($id)->toArray(),
+        ];
     }
 }
