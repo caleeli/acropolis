@@ -17,7 +17,6 @@ class CreateEconomiaCategoriasTable extends Migration
             $table->bigIncrements('id');
             $table->string('nombre');
             $table->string('codigo');
-            $table->string('tipo')->default('ingreso');
             $table->string('icono');
             $table->timestamps();
         });

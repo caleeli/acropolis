@@ -88,7 +88,7 @@ class User extends Authenticatable
         $ingresos = doubleval(Diario::noInicial()->whereGestionActual()->sum('ingreso'));
         $egresos = doubleval(Diario::noInicial()->whereGestionActual()->sum('egreso'));
         $saldoCaja = doubleval($caja->saldo);
-        $saldoCuenta = doubleval($cuenta->saldo);
+        $saldoCuenta = doubleval($cuenta->saldo ?? 0);
         return compact('ingresos', 'egresos', 'saldoCaja', 'saldoCuenta');
     }
 }

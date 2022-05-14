@@ -14,12 +14,12 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'economia',
-            'email' => 'economia-lapaz@nuevaacropolis.org',
+            'name' => 'NA',
+            'email' => 'NA',
             'avatar' => ['url' => 'https://www.meteorologiaenred.com/wp-content/uploads/2019/04/Pit%C3%A1goras.jpg'],
-            'password' => Hash::make('12345678'),
-            'ultimo_aporte' => 'Enero/2019',
-            'iniciales' => 'EC',
+            'password' => Hash::make('economia2022'),
+            'ultimo_aporte' => 'Enero/2022',
+            'iniciales' => 'NA',
         ]);
     }
 }

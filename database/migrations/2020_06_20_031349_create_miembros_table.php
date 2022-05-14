@@ -16,6 +16,8 @@ class CreateMiembrosTable extends Migration
         Schema::create('miembros', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nombre');
+            $table->string('cumple')->nullable();
+            $table->string('telefono')->nullable();
             $table->json('avatar')->nullable();
             $table->boolean('activo')->default(true);
             $table->double('aporte_mensual')->default(150);
